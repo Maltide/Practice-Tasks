@@ -2,6 +2,33 @@
 
 This repository collects small Go practice exercises focused on fundamental algorithms and data structures. Each topic lives in its own directory and may be further split into subdirectories by theme. Every section ships with problem statements, solutions, tests, and guidance so that new tasks can be added later.
 
+## Progress Checklist
+### `strings/`
+- [ ] `IsPalindrome(s string) bool`
+- [ ] `AreAnagrams(a, b string) bool`
+- [ ] `IsBracketSequenceBalanced(s string) bool`
+
+### `slices/find-smallest/`
+- [x] `FindSmallestInt(nums []int) int`
+- [x] `FindSmallestTime(times []time.Time) time.Time`
+
+### `slices/basics/`
+- [ ] `SumAndAverage(nums []int) (int, float64)`
+- [ ] `ReverseSlice(nums []int) []int`
+- [ ] `RemoveAtIndex(nums []int, i int) []int`
+- [ ] `SecondLargest(nums []int) int`
+
+### `maps/find-smallest/`
+- [x] `FindSmallestIntInMap(m map[int]int) int`
+- [x] `FindSmallestIntInMapMap(m map[int]map[int]int) int`
+
+### `maps/basics/`
+- [ ] `CountFrequencies(items []string) map[string]int`
+- [ ] `UniqueValues(nums []int) []int`
+
+### `misc/`
+- [ ] `Fibonacci(n int) []int`
+
 ## Getting Started
 - Install Go 1.21+ (or your team's current toolchain).
 - Clone this repository and explore the topic directories.
