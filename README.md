@@ -14,8 +14,8 @@ This repository collects small Go practice exercises focused on fundamental algo
 
 ### `slices/basics/`
 - [ ] `SumAndAverage(nums []int) (int, float64)`
-- [ ] `ReverseSlice(nums []int) []int`
-- [ ] `RemoveAtIndex(nums []int, i int) []int`
+- [x] `ReverseSlice(nums []int) []int`
+- [x] `RemoveAtIndex(nums []int, i int) []int`
 - [ ] `SecondLargest(nums []int) int`
 
 ### `maps/find-smallest/`

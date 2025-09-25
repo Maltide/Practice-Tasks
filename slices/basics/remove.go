@@ -12,5 +12,6 @@ package problems
 // Пример:
 //   - nums = []int{10, 20, 30, 40}, i = 2 -> []int{10, 20, 40}
 func RemoveAtIndex(nums []int, i int) []int {
-	panic("not implemented")
+	nums = append(nums[:i], nums[i+1:]...)
+	return nums
 }

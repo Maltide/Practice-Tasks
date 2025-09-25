@@ -11,5 +11,11 @@ package problems
 // Пример:
 //   - nums = []int{1, 2, 3} -> []int{3, 2, 1}
 func ReverseSlice(nums []int) []int {
-	panic("not implemented")
+	reverse := []int{}
+
+	for i := range nums {
+		reverse = append(reverse, nums[len(nums)-1-i])
+	}
+	nums = reverse
+	return nums
 }
