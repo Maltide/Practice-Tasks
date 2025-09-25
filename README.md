@@ -13,10 +13,10 @@ This repository collects small Go practice exercises focused on fundamental algo
 - [x] `FindSmallestTime(times []time.Time) time.Time`
 
 ### `slices/basics/`
-- [ ] `SumAndAverage(nums []int) (int, float64)`
+- [x] `SumAndAverage(nums []int) (int, float64)`
 - [x] `ReverseSlice(nums []int) []int`
 - [x] `RemoveAtIndex(nums []int, i int) []int`
-- [ ] `SecondLargest(nums []int) int`
+- [x] `SecondLargest(nums []int) int`
 
 ### `maps/find-smallest/`
 - [x] `FindSmallestIntInMap(m map[int]int) int`
