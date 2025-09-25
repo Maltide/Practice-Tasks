@@ -4,8 +4,8 @@ This repository collects small Go practice exercises focused on fundamental algo
 
 ## Progress Checklist
 ### `strings/`
-- [ ] `IsPalindrome(s string) bool`
-- [ ] `AreAnagrams(a, b string) bool`
+- [х] `IsPalindrome(s string) bool`
+- [х] `AreAnagrams(a, b string) bool`
 - [ ] `IsBracketSequenceBalanced(s string) bool`
 
 ### `slices/find-smallest/`

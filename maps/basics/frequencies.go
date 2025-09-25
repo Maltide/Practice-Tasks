@@ -11,5 +11,14 @@ package problems
 // Пример:
 //   - items = []string{"a", "b", "a"} -> map[string]int{"a": 2, "b": 1}
 func CountFrequencies(items []string) map[string]int {
-	panic("not implemented")
+
+	counter := make(map[string]int)
+
+	for _, val := range items {
+		if _, ok := counter[val]; !ok {
+			counter[val] = 0
+		}
+		counter[val]++
+	}
+	return counter
 }

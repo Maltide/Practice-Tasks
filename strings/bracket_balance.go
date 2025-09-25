@@ -13,5 +13,36 @@ package problems
 //   - s = "([]){}" -> true
 //   - s = "([)]"   -> false
 func IsBracketSequenceBalanced(s string) bool {
-	panic("not implemented")
+	// 	var bstr []byte = []byte(s)
+	// 	runebraces := []rune{'(', ')', '[', ']', '{', '}'}
+	// 	bytebrace := make(map[byte]bool)
+	// 	for i := range runebraces {
+	// 		bytebrace[i] = byte(runebraces[i])
+	// 	}
+
+	// 	for i := range bstr {
+	// 		switch bstr[i] {
+	// 		case '(':
+	// 			if bstr[i+1] == ')' {
+	// 				continue
+	// 			} else {
+	// 				return false
+	// 			}
+	// 		case '[':
+	// 			if bstr[i+1] == ']' {
+	// 				continue
+	// 			} else {
+	// 				return false
+	// 			}
+	// 		case '{':
+	// 			if bstr[i+1] == '}' {
+	// 				continue
+	// 			} else {
+	// 				return false
+	// 			}
+	// 		default:
+	// 			return true
+	// 		}
+	// 	}
+	return true
 }
