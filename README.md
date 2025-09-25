@@ -23,8 +23,8 @@ This repository collects small Go practice exercises focused on fundamental algo
 - [x] `FindSmallestIntInMapMap(m map[int]map[int]int) int`
 
 ### `maps/basics/`
-- [ ] `CountFrequencies(items []string) map[string]int`
-- [ ] `UniqueValues(nums []int) []int`
+- [x] `CountFrequencies(items []string) map[string]int`
+- [x] `UniqueValues(nums []int) []int`
 
 ### `misc/`
 - [ ] `Fibonacci(n int) []int`

@@ -12,5 +12,14 @@ package problems
 // Пример:
 //   - nums = []int{1, 2, 3} -> sum = 6, avg = 2.0
 func SumAndAverage(nums []int) (sum int, avg float64) {
-	panic("not implemented")
+	for _, val := range nums {
+		sum += val
+	}
+	if len(nums) == 1 {
+		avg = float64(sum)
+	} else {
+		avg = float64(sum) / float64(len(nums))
+	}
+
+	return sum, avg
 }
