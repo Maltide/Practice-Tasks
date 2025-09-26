@@ -1,51 +1,36 @@
-# Practice Tasks
+# Go Practice Tasks
 
-This repository collects small Go practice exercises focused on fundamental algorithms and data structures. Each topic lives in its own directory and may be further split into subdirectories by theme. Every section ships with problem statements, solutions, tests, and guidance so that new tasks can be added later.
+## 📊 Общий прогресс
+- **Всего задач**: 15
+- **Решено**: 15 (100%)
+- **Текущий спринт**: Sprint 02
 
-## Progress Checklist
-### `strings/`
-- [x] `IsPalindrome(s string) bool`
-- [x] `AreAnagrams(a, b string) bool`
-- [x] `IsBracketSequenceBalanced(s string) bool`
+### Прогресс по спринтам
+| Спринт | Задач | Решено | Прогресс |
+|--------|-------|--------|----------|
+| [Sprint 01: Основы](sprints/sprint-01-basics/) | 4 | 4 | ✅ 100% |
+| [Sprint 02: Алгоритмы](sprints/sprint-02-algorithms/) | 7 | 7 | ✅ 100% |
+| [Sprint 03: Продвинутые](sprints/sprint-03-advanced/) | 4 | 0 | ⏳ 0% |
 
-### `slices/find-smallest/`
-- [x] `FindSmallestInt(nums []int) int`
-- [x] `FindSmallestTime(times []time.Time) time.Time`
+## 🎯 Быстрый старт
+1. Начните с [Sprint 01](sprints/sprint-01-basics/)
+2. Решите все задачи спринта
+3. Запустите `go run scripts/progress.go` для обновления статистики
+4. Переходите к следующему спринту
 
-### `slices/basics/`
-- [x] `SumAndAverage(nums []int) (int, float64)`
-- [x] `ReverseSlice(nums []int) []int`
-- [x] `RemoveAtIndex(nums []int, i int) []int`
-- [x] `SecondLargest(nums []int) int`
-
-### `maps/find-smallest/`
-- [x] `FindSmallestIntInMap(m map[int]int) int`
-- [x] `FindSmallestIntInMapMap(m map[int]map[int]int) int`
-
-### `maps/basics/`
-- [x] `CountFrequencies(items []string) map[string]int`
-- [x] `UniqueValues(nums []int) []int`
-
-### `misc/`
-- [x] `Fibonacci(n int) []int`
-
-## Getting Started
-- Install Go 1.21+ (or your team's current toolchain).
-- Clone this repository and explore the topic directories.
-- Open the README in the topic you want to study (for example `slices/README.md`) to see the recommended order of tasks and test commands.
+## 📚 Структура обучения
+- **Sprint 01**: Основы работы со строками, слайсами, мапами (поиск минимума)
+- **Sprint 02**: Базовые алгоритмы и структуры данных (анаграммы, баланс скобок, частоты, реверс, удаление, второй максимум, Фибоначчи)
+- **Sprint 03**: Продвинутые техники и оптимизация
 
 ## Repository Layout
-- `strings/` — формулировки задач на палиндром, анаграммы и баланс скобок без готовых решений.
-- `slices/` — поддиректории с задачами на слайсы (`find-smallest/`, `basics/`).
-- `maps/` — поддиректории с задачами на отображения (`find-smallest/`, `basics/`).
-- `misc/` — числовые задачи; сейчас содержит генератор чисел Фибоначчи.
-
-Add new topics by creating additional directories at the repo root that follow the same pattern: exported functions under the `problems` package, an explanatory README, and matching tests. Внутри тем группируйте упражнения по подпапкам, чтобы не захламлять каталог.
+- `sprints/` — задачи, сгруппированные по спринтам.
+- `archive/` — старые задачи, не вошедшие в текущую структуру.
 
 ## Working on Tasks
 1. Read the task description and comments inside the starter function.
 2. Implement or review the solution, paying attention to edge cases like empty inputs.
-3. Run the tests for that task (`go test ./slices/find-smallest -run TestFindSmallestInt` as an example) until they pass.
+3. Run the tests for that task (`go test ./sprints/sprint-01-basics/maps-find-smallest/ -run TestFindSmallestIntInMap` as an example) until they pass.
 4. Use `go test ./...` from the repository root to make sure every exercise still succeeds.
 
 ## Authoring New Exercises
