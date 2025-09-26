@@ -11,5 +11,20 @@ package problems
 // Пример:
 //   - n = 5 -> []int{0, 1, 1, 2, 3}
 func Fibonacci(n int) []int {
-	panic("not implemented")
+	Fibonaccislice := []int{}
+	num := 0
+	for i := range n {
+		if i == 0 {
+			Fibonaccislice = append(Fibonaccislice, 0)
+			continue
+		}
+		if i == 1 {
+			Fibonaccislice = append(Fibonaccislice, 1)
+			continue
+		}
+		num = Fibonaccislice[i-1] + Fibonaccislice[i-2]
+		Fibonaccislice = append(Fibonaccislice, num)
+	}
+
+	return Fibonaccislice
 }

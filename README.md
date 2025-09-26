@@ -6,7 +6,7 @@ This repository collects small Go practice exercises focused on fundamental algo
 ### `strings/`
 - [x] `IsPalindrome(s string) bool`
 - [x] `AreAnagrams(a, b string) bool`
-- [ ] `IsBracketSequenceBalanced(s string) bool`
+- [x] `IsBracketSequenceBalanced(s string) bool`
 
 ### `slices/find-smallest/`
 - [x] `FindSmallestInt(nums []int) int`
@@ -27,7 +27,7 @@ This repository collects small Go practice exercises focused on fundamental algo
 - [x] `UniqueValues(nums []int) []int`
 
 ### `misc/`
-- [ ] `Fibonacci(n int) []int`
+- [x] `Fibonacci(n int) []int`
 
 ## Getting Started
 - Install Go 1.21+ (or your team's current toolchain).
