@@ -1,5 +1,7 @@
 package slice
 
+import "fmt"
+
 // IntersectionUnique находит пересечение двух слайсов целых чисел, возвращая уникальные значения.
 //
 // Задача:
@@ -38,8 +40,52 @@ package slice
 //
 // Идиоматичный Go:
 //   - Используйте map[int]bool или map[int]struct{} для создания множества
-//   - Возвращайте nil для пустого результата или []int{}
+//   - Возвращайте nil для пустого результата или []int{}   // в итоге выяснилось, что слайс и пустые есть, инциализированные, и при этом nil-овые, т.е. стоило бы написать в этой строке "И" вместо "ИЛИ"
 func IntersectionUnique(a, b []int) []int {
-	// TODO: Реализуйте функцию
-	return nil
+	var resultslice = []int{}
+
+	// if a == nil || b == nil { насколько нужна данная проверка если в цикле далее все равно все автоскпинется из-за отсутсвия слаайсов как таковых и попадет на финальную проверку в конце кода???
+	// 	return nil
+	// }
+
+	biggestslice := make(map[int]bool)
+	duplicate := make(map[int]bool)
+
+	if len(a) <= len(b) {
+		for _, val := range b {
+			biggestslice[val] = true
+		}
+		for _, val := range a {
+			if duplicate[val] {
+				continue
+			}
+			if biggestslice[val] {
+				resultslice = append(resultslice, val)
+				duplicate[val] = true
+			}
+			fmt.Printf("Biggestslice: %v\n", biggestslice)
+			fmt.Printf("Duplicate: %v\n", duplicate)
+		}
+
+	} else {
+		for _, val := range a {
+			biggestslice[val] = true
+		}
+		for _, val := range b {
+			if duplicate[val] {
+				continue
+			}
+			if biggestslice[val] {
+				resultslice = append(resultslice, val)
+				duplicate[val] = true
+			}
+		}
+		fmt.Printf("Biggestslice: %v\n", biggestslice)
+		fmt.Printf("Duplicate: %v\n", duplicate)
+	}
+	if len(resultslice) == 0 {
+		return nil
+	} else {
+		return resultslice
+	}
 }
