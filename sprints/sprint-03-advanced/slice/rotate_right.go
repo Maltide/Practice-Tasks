@@ -43,6 +43,26 @@ package slice
 //   - Создайте новый слайс, не изменяя исходный
 //   - Обработайте граничные случаи в начале функции
 func RotateRight(nums []int, k int) []int {
-	// TODO: Реализуйте функцию
-	return nil
+
+	if len(nums) == 0 {
+		return []int{}
+	}
+
+	if k == 0 {
+		return nums
+	}
+
+	if k > len(nums) {
+		k = k % len(nums)
+	}
+
+	resultslice := []int{}
+
+	cut := len(nums) - k
+
+	resultslice = append(resultslice, nums[cut:]...)
+
+	resultslice = append(resultslice, nums[:cut]...)
+
+	return resultslice
 }

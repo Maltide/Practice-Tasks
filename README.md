@@ -44,9 +44,9 @@
 
 Hints live in **HINTS.md** and are intended as a **last resort**. Attempt the problems unaided first.
 
-- [ ] 1) Intersection of Two Slices (slice)
-- [ ] 2) Remove Duplicates from Sorted Slice (slice)
-- [ ] 3) Rotate Slice Right by k (slice)
+- [x] 1) Intersection of Two Slices (slice)
+- [~x] 2) Remove Duplicates from Sorted Slice (slice)
+- [~x] 3) Rotate Slice Right by k (slice)
 - [ ] 4) Maximum Sum Subarray, fixed k (slice)
 - [ ] 5) Merge Two Sorted Slices (slice)
 - [ ] 6) Longest Common Prefix (string)

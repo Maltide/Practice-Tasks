@@ -47,7 +47,20 @@ package slice
 // Идиоматичный Go:
 //   - Изменяйте исходный слайс напрямую
 //   - Возвращайте новую длину как int
-func DedupeSortedInPlace(nums []int) int {
-	// TODO: Реализуйте функцию
-	return 0
+func DedupeSortedInPlace(nums []int) int { //а точно ли write, read можно назвать указателями ? слайс меняется не через прямое обращение к указателям (*read or *write), а слайс меняется обращаясь к ним.
+
+	if len(nums) <= 1 {
+		return len(nums)
+	}
+
+	write := 1
+
+	for read := 1; read < len(nums); read++ {
+		if nums[read] != nums[write-1] {
+			nums[write] = nums[read]
+			write++
+		}
+	}
+
+	return write
 }
