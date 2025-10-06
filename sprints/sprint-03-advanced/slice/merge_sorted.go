@@ -44,6 +44,32 @@ package slice
 //   - Используйте append для добавления оставшихся элементов
 //   - Обработайте граничные случаи в начале функции
 func MergeSorted(a, b []int) []int {
-	// TODO: Реализуйте функцию
-	return nil
+	if len(a) == 0 && len(b) == 0 {
+		return []int{}
+	} else if len(a) == 0 && len(b) != 0 {
+		return b
+	} else if len(a) != 0 && len(b) == 0 {
+		return a
+	}
+
+	resultslice := []int{}
+	i, j := 0, 0
+
+	for i < len(a) && j < len(b) {
+		if a[i] <= b[j] {
+			resultslice = append(resultslice, a[i])
+			i++
+		} else {
+			resultslice = append(resultslice, b[j])
+			j++
+		}
+	}
+	if i < len(a) {
+		resultslice = append(resultslice, a[i:]...)
+	}
+	if j < len(b) {
+		resultslice = append(resultslice, b[j:]...)
+	}
+
+	return resultslice
 }

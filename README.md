@@ -48,7 +48,7 @@ Hints live in **HINTS.md** and are intended as a **last resort**. Attempt the pr
 - [~x] 2) Remove Duplicates from Sorted Slice (slice)
 - [~x] 3) Rotate Slice Right by k (slice)
 - [~x] 4) Maximum Sum Subarray, fixed k (slice)
-- [ ] 5) Merge Two Sorted Slices (slice)
+- [~x] 5) Merge Two Sorted Slices (slice)
 - [ ] 6) Longest Common Prefix (string)
 - [ ] 7) First Non-Repeating Character (string)
 - [ ] 8) Run-Length Encoding (string)
