@@ -49,6 +49,26 @@ package slice
 //   - Возвращайте (0, false) для невалидных случаев
 //   - Используйте простые циклы for для скольжения окна
 func MaxSumFixedK(nums []int, k int) (int, bool) {
-	// TODO: Реализуйте функцию
-	return 0, false
+	if k > len(nums) || k <= 0 || len(nums) == 0 {
+		return 0, false
+	}
+
+	summary := 0
+
+	for i := range k {
+		summary += nums[i]
+	}
+
+	best := summary
+
+	for i := k; i < len(nums); i++ {
+
+		summary = summary + nums[i] - nums[i-k]
+
+		if summary > best {
+			best = summary
+		}
+	}
+
+	return best, true
 }
