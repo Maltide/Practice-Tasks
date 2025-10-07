@@ -43,6 +43,20 @@ package stringsprint
 //   - Или массив [26]int для английских букв (более эффективно)
 //   - Итерируйтесь по строке с помощью range для корректной работы с Unicode
 func FirstUniqueCharIndex(s string) int {
-	// TODO: Реализуйте функцию
+	if len(s) == 0 {
+		return -1
+	}
+
+	countchars := make(map[rune]int)
+
+	for _, val := range s {
+		countchars[val]++
+	}
+
+	for i, val := range s {
+		if countchars[val] == 1 {
+			return i
+		}
+	}
 	return -1
 }
