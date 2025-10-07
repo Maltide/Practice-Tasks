@@ -44,7 +44,32 @@ package stringsprint
 //   - Используйте range для итерации по символам
 //   - Работайте с rune для корректной обработки Unicode
 //   - Возвращайте подстроку исходной строки
+
 func LongestCommonPrefix(words []string) string {
-	// TODO: Реализуйте функцию
-	return ""
+	if len(words) == 0 {
+		return ""
+	}
+
+	if len(words) == 1 {
+		return words[0]
+	}
+
+	firstword := words[0]
+	prefix := []byte{} // flower, checking flow
+	var flag bool
+	for i := 0; i < len(firstword); i++ {
+		flag = true
+		for j := 1; j < len(words); j++ {
+			if i >= len(words[j]) || words[j][i] != firstword[i] {
+				flag = false
+				break
+			}
+		}
+		if !flag {
+			break
+		}
+		prefix = append(prefix, []byte(firstword)[i])
+	}
+
+	return string(prefix)
 }
