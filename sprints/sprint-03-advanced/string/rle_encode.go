@@ -1,5 +1,10 @@
 package stringsprint
 
+import (
+	"strconv"
+	"strings"
+)
+
 // RLEncode выполняет кодирование строки методом Run-Length Encoding (RLE).
 //
 // Задача:
@@ -46,6 +51,35 @@ package stringsprint
 //   - Используйте strconv.Itoa для преобразования числа в строку
 //   - Итерируйтесь по rune для корректной работы с Unicode
 func RLEncode(s string) string {
-	// TODO: Реализуйте функцию
-	return ""
+	if len(s) == 0 {
+		return ""
+	}
+
+	var builder strings.Builder
+	count := 1
+	current := s[0]
+
+	for i := 1; i < len(s); i++ {
+		if s[i] == current {
+			count++
+			continue
+		}
+
+		builder.WriteByte(current)
+
+		if count > 1 {
+			builder.WriteString(strconv.Itoa(count))
+		}
+
+		current = s[i]
+		count = 1
+	}
+
+	builder.WriteByte(current)
+
+	if count > 1 {
+		builder.WriteString(strconv.Itoa(count))
+	}
+
+	return builder.String()
 }

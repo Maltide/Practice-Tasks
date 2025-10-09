@@ -50,7 +50,7 @@ Hints live in **HINTS.md** and are intended as a **last resort**. Attempt the pr
 - [~x] 4) Maximum Sum Subarray, fixed k (slice)
 - [~x] 5) Merge Two Sorted Slices (slice)
 - [~x] 6) Longest Common Prefix (string)
-- [ ] 7) First Non-Repeating Character (string)
+- [x] 7) First Non-Repeating Character (string)
 - [ ] 8) Run-Length Encoding (string)
 - [ ] 9) Run-Length Decoding (string)
 - [ ] 10) Invert Map with Unique Values (map)
