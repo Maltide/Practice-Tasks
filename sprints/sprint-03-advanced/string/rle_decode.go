@@ -1,5 +1,12 @@
 package stringsprint
 
+import (
+	"fmt"
+	"strconv"
+	"strings"
+	"unicode"
+)
+
 // RLDecode выполняет декодирование строки из формата Run-Length Encoding (RLE).
 //
 // Задача:
@@ -52,6 +59,63 @@ package stringsprint
 //   - Возвращайте описательные ошибки с fmt.Errorf
 //   - Используйте unicode.IsDigit для проверки цифр
 func RLDecode(s string) (string, error) {
-	// TODO: Реализуйте функцию
-	return "", nil
+	if len(s) == 0 {
+		return "", nil
+	}
+
+	var builder strings.Builder
+	count := ""
+	current := rune(s[0])
+
+	if unicode.IsDigit(current) {
+		return "", fmt.Errorf("число без символа")
+	} else if current == '-' {
+		return "", fmt.Errorf("неправильный формат данных")
+	}
+
+	for i := 1; i < len(s); i++ {
+		if s[i] == '-' {
+			return "", fmt.Errorf("отрицательное значение")
+		}
+
+		if unicode.IsDigit(rune(s[i])) {
+			count += string(s[i])
+			continue
+		}
+
+		if len(count) == 0 {
+			builder.WriteRune(current)
+			current = rune(s[i])
+			count = ""
+			continue
+		}
+
+		number, err := strconv.Atoi(count)
+		if err != nil {
+			return "", err
+		}
+
+		for range number {
+			builder.WriteRune(current)
+		}
+		current = rune(s[i])
+		count = ""
+
+	}
+
+	if len(count) == 0 {
+		builder.WriteRune(current)
+	} else {
+		number, err := strconv.Atoi(count)
+		if err != nil {
+			return "", err
+		}
+
+		for range number {
+			builder.WriteRune(current)
+		}
+
+	}
+
+	return builder.String(), nil
 }

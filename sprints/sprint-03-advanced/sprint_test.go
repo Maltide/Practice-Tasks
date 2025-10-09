@@ -236,7 +236,7 @@ func TestRLEncode(t *testing.T) {
 		{"mixed repeats", "aabbcc", "a2b2c2"},
 		{"complex pattern", "aabaa", "a2ba2"},
 		{"with spaces", "aa  bb", "a2 2b2"},
-		{"numbers", "112233", "1223"},
+		{"numbers", "112233", "122232"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
