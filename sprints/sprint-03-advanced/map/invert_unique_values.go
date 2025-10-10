@@ -44,6 +44,15 @@ package mapsprint
 //   - Итерируйтесь по исходному map с помощью range
 //   - Возвращайте пустой map для пустого входа
 func InvertUnique(m map[string]int) map[int]string {
-	// TODO: Реализуйте функцию
-	return nil
+
+	if len(m) == 0 {
+		return make(map[int]string)
+	}
+
+	new_m := make(map[int]string)
+
+	for i, val := range m {
+		new_m[val] = i
+	}
+	return new_m
 }

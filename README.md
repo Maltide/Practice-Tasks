@@ -53,7 +53,7 @@ Hints live in **HINTS.md** and are intended as a **last resort**. Attempt the pr
 - [x] 7) First Non-Repeating Character (string)
 - [?] 8) Run-Length Encoding (string)
 - [x] 9) Run-Length Decoding (string)
-- [ ] 10) Invert Map with Unique Values (map)
+- [x] 10) Invert Map with Unique Values (map)
 - [ ] 11) Two Sum — return indices (mixed)
 
 ## Next Steps
