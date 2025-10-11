@@ -47,7 +47,22 @@ package mixed
 //   - Используйте map[int]int для хранения значение -> индекс
 //   - Проверяйте существование ключа с помощью value, ok := map[key]
 //   - Возвращайте (-1, -1) если решения нет
+
 func TwoSum(nums []int, target int) (int, int) {
-	// TODO: Реализуйте функцию
+	if len(nums) == 0 {
+		return -1, -1
+	}
+
+	m := make(map[int]int)
+
+	for i, val := range nums {
+		complement := target - val
+		if idx, ok := m[complement]; ok {
+			return idx, i
+		} else {
+			m[val] = i
+		}
+	}
+
 	return -1, -1
 }
