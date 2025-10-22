@@ -70,7 +70,7 @@ exit:
 		done2 <- true
 	}()
 
-	timeout := time.After(500 * time.Millisecond)
+	// timeout := time.After(150 * time.Millisecond)
 	for {
 		select {
 		case msg := <-c1:
@@ -80,7 +80,7 @@ exit:
 		case <-done2:
 			fmt.Println("Done signal received")
 			return
-		case <-timeout:
+		case <-time.After(150 * time.Millisecond):
 			fmt.Println("Timeout!")
 			return
 		}

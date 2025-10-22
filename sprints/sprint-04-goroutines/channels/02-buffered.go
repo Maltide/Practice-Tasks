@@ -39,10 +39,13 @@ func main() {
 	results := make(chan int, 5)
 
 	for w := 1; w <= 3; w++ {
+		fmt.Printf("Start worker %d\n", w)
 		go worker(w, jobs, results)
+
 	}
 
 	for j := 1; j <= 5; j++ {
+		fmt.Printf("Writing j №%d in jobs ch\n", j)
 		jobs <- j
 	}
 	close(jobs)
@@ -50,7 +53,7 @@ func main() {
 	for r := 1; r <= 5; r++ {
 		fmt.Printf("Result: %d\n", <-results)
 	}
-
+	return
 	fmt.Println("\n--- Rate Limiting ---")
 	requests := make(chan int, 3)
 
@@ -87,7 +90,8 @@ func main() {
 func worker(id int, jobs <-chan int, results chan<- int) {
 	for job := range jobs {
 		fmt.Printf("Worker %d processing job %d\n", id, job)
-		time.Sleep(100 * time.Millisecond)
+		// time.Sleep(100 * time.Millisecond)
 		results <- job * 2
 	}
+	fmt.Printf("worker %d done\n", id)
 }

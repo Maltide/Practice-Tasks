@@ -14,12 +14,12 @@ func main() {
 	c2 := make(chan string)
 
 	go func() {
-		time.Sleep(100 * time.Millisecond)
+		time.Sleep(400 * time.Millisecond)
 		c1 <- "result from c1"
 	}()
 
 	go func() {
-		time.Sleep(200 * time.Millisecond)
+		time.Sleep(110 * time.Millisecond)
 		c2 <- "result from c2"
 	}()
 
@@ -45,10 +45,10 @@ func main() {
 		fmt.Println("No message received (non-blocking)")
 	}
 
-	msg := "hi"
+	greeting := "hi"
 	select {
-	case messages <- msg:
-		fmt.Println("Sent message:", msg)
+	case messages <- greeting:
+		fmt.Println("Sent message:", greeting)
 	default:
 		fmt.Println("No message sent")
 	}
@@ -70,18 +70,18 @@ func main() {
 	go func() {
 		for {
 			select {
+			case v := <-values:
+				fmt.Printf("Processing: %d\n", v)
 			case <-done:
 				fmt.Println("Worker stopped")
 				return
-			case v := <-values:
-				fmt.Printf("Processing: %d\n", v)
 			}
 		}
 	}()
 
 	for i := 0; i < 3; i++ {
 		values <- i
-		time.Sleep(50 * time.Millisecond)
+		// time.Sleep(50 * time.Millisecond)
 	}
 
 	done <- true

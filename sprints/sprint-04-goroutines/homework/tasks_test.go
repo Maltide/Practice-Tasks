@@ -106,14 +106,14 @@ func TestFetchURLs(t *testing.T) {
 	}{
 		{"empty urls", []string{}, 1 * time.Second, false, 0},
 		{"nil urls", nil, 1 * time.Second, false, 0},
-		{"single url", []string{"http://example.com"}, 1 * time.Second, false, 1},
-		{"multiple urls", []string{"http://example.com", "http://google.com"}, 2 * time.Second, false, 2},
-		{"with timeout", []string{"http://example.com"}, 1 * time.Millisecond, true, 0},
+		{"single url", []string{"http://google.com"}, 1 * time.Second, false, 1},
+		{"multiple urls", []string{"http://google.com", "http://github.com"}, 2 * time.Second, false, 2},
+		{"with timeout", []string{"http://google.com"}, 1 * time.Millisecond, true, 0},
 		{"invalid url", []string{"http://invalid.url.that.does.not.exist"}, 1 * time.Second, false, 0},
-		{"mixed valid/invalid", []string{"http://example.com", "http://invalid.url.that.does.not.exist"}, 2 * time.Second, false, 1},
-		{"duplicate urls", []string{"http://example.com", "http://example.com"}, 2 * time.Second, false, 2},
-		{"very short timeout", []string{"http://example.com"}, 1 * time.Nanosecond, true, 0},
-		{"long timeout", []string{"http://example.com"}, 10 * time.Second, false, 1},
+		{"mixed valid/invalid", []string{"http://google.com", "http://invalid.url.that.does.not.exist"}, 2 * time.Second, false, 1},
+		{"duplicate urls", []string{"http://google.com", "http://google.com"}, 2 * time.Second, false, 1},
+		{"very short timeout", []string{"http://google.com"}, 1 * time.Nanosecond, true, 0},
+		{"long timeout", []string{"http://google.com"}, 10 * time.Second, false, 1},
 	}
 
 	for _, tt := range tests {
@@ -132,7 +132,6 @@ func TestFetchURLs(t *testing.T) {
 
 func BenchmarkFetchURLs(b *testing.B) {
 	urls := []string{
-		"http://example.com",
 		"http://google.com",
 		"http://github.com",
 	}
@@ -760,23 +759,23 @@ func TestConcurrentDownloader(t *testing.T) {
 	}{
 		{"empty", []string{}, 2, 0},
 		{"nil urls", nil, 2, 0},
-		{"single", []string{"http://example.com"}, 1, 1},
-		{"multiple", []string{"http://example.com", "http://google.com", "http://github.com"}, 2, 3},
-		{"zero concurrent", []string{"http://example.com"}, 0, 0},
-		{"negative concurrent", []string{"http://example.com"}, -1, 0},
-		{"single url many concurrent", []string{"http://example.com"}, 100, 1},
+		{"single", []string{"http://google.com"}, 1, 1},
+		{"multiple", []string{"http://google.com", "http://google.com", "http://github.com"}, 2, 3},
+		{"zero concurrent", []string{"http://google.com"}, 0, 0},
+		{"negative concurrent", []string{"http://google.com"}, -1, 0},
+		{"single url many concurrent", []string{"http://google.com"}, 100, 1},
 		{"many urls few concurrent", []string{
-			"http://example.com", "http://google.com", "http://github.com",
+			"http://google.com", "http://google.com", "http://github.com",
 			"http://stackoverflow.com", "http://reddit.com",
 		}, 2, 5},
-		{"duplicate urls", []string{"http://example.com", "http://example.com"}, 2, 2},
+		{"duplicate urls", []string{"http://google.com", "http://google.com"}, 2, 2},
 		{"invalid urls", []string{"http://invalid.url.that.does.not.exist"}, 1, 0},
 		{"mixed valid/invalid", []string{
-			"http://example.com", "http://invalid.url.that.does.not.exist",
+			"http://google.com", "http://invalid.url.that.does.not.exist",
 			"http://google.com",
 		}, 2, 2},
 		{"large concurrent limit", []string{
-			"http://example.com", "http://google.com", "http://github.com",
+			"http://google.com", "http://google.com", "http://github.com",
 		}, 100, 3},
 		{"more urls than concurrent limit", makeExampleURLs(50), 5, 50},
 	}
@@ -802,7 +801,7 @@ func makeExampleURLs(count int) []string {
 
 func BenchmarkConcurrentDownloader(b *testing.B) {
 	urls := []string{
-		"http://example.com",
+		"http://google.com",
 		"http://google.com",
 		"http://github.com",
 		"http://stackoverflow.com",

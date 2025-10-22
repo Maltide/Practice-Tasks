@@ -1,6 +1,11 @@
 package homework
 
 import (
+	"context"
+	"errors"
+	"fmt"
+	"net/http"
+	"sync"
 	"time"
 )
 
@@ -30,7 +35,62 @@ func FetchURLs(urls []string, timeout time.Duration) (map[string]int, error) {
 	// 5. Wait for all goroutines to complete
 	// 6. Collect results into map of URL to status code
 	// 7. Return map and any errors
-	return nil, nil
+	if len(urls) == 0 {
+		return make(map[string]int), nil
+	}
+
+	fmt.Printf("Run FetchURLs on %v\n", urls)
+
+	type result struct {
+		url    string
+		status int
+		err    error
+	}
+	var wg sync.WaitGroup
+	m := make(map[string]int, len(urls))
+	client := &http.Client{Timeout: timeout}
+
+	//ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+
+	ch := make(chan result, len(urls))
+
+	for _, u := range urls {
+		wg.Add(1)
+		go func(url string) {
+			defer wg.Done()
+			fmt.Printf("Starting goroutine with url %v\n", url)
+			resp, err := client.Get(url)
+			fmt.Printf("url %v; err = %v, resp = %v\n", url, err, resp)
+			if err != nil {
+				ch <- result{url: url, status: 0, err: err}
+				return
+			}
+			defer resp.Body.Close()
+			statusCode := resp.StatusCode
+			res := result{
+				url:    url,
+				status: statusCode,
+				err:    err,
+			}
+			fmt.Printf("url: %v, statuscode: %v, err: %v", res.url, res.status, res.err)
+			ch <- res
+		}(u)
+	}
+
+	wg.Wait()
+	close(ch)
+	for res := range ch {
+		fmt.Printf("res found in channel = %v\n", res)
+		if res.err != nil {
+			if errors.Is(res.err, context.DeadlineExceeded) {
+				return m, res.err
+				// m[res.url] = 0
+			}
+		}
+		m[res.url] = res.status
+	}
+
+	return m, nil
 }
 
 // FetchWithRetry fetches a URL with retry logic

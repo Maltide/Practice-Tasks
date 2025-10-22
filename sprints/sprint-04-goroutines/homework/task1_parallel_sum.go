@@ -1,5 +1,7 @@
 package homework
 
+import "sync"
+
 // Task 1: Concurrent Computing - Parallel Sum
 //
 // OBJECTIVE: Calculate sum of numbers using parallel goroutines
@@ -32,7 +34,39 @@ func ParallelSum(numbers []int, workers int) int {
 	// 6. Launch separate goroutine to wait for all workers and close results channel
 	// 7. Collect all partial sums from results channel
 	// 8. Return total sum
-	return 0
+	if len(numbers) == 0 || workers <= 0 {
+		return 0
+	}
+	var wg sync.WaitGroup
+
+	size := (len(numbers) + workers - 1) / workers
+	ch := make(chan int, workers)
+
+	for i := 0; i < workers; i++ {
+		wg.Add(1)
+		go func(i int) {
+			defer wg.Done()
+			start := i * size
+			if start >= len(numbers) {
+				return
+			}
+			end := min(start+size, len(numbers))
+			sum := 0
+			for _, val := range numbers[start:end] {
+
+				sum += val
+			}
+			ch <- sum
+		}(i)
+	}
+	wg.Wait()
+	close(ch)
+	var result int
+	for val := range ch {
+		result += val
+	}
+	return result
+
 }
 
 // SquareSum calculates sum of squares in parallel
@@ -40,5 +74,36 @@ func SquareSum(numbers []int, workers int) int {
 	// TODO: Implement parallel sum of squares
 	// 1. Same algorithm as ParallelSum
 	// 2. But square each number before adding to the sum
-	return 0
+	if len(numbers) == 0 || workers <= 0 {
+		return 0
+	}
+	var wg sync.WaitGroup
+
+	size := (len(numbers) + workers - 1) / workers
+	ch := make(chan int, workers)
+
+	for i := 0; i < workers; i++ {
+		wg.Add(1)
+		go func(i int) {
+			defer wg.Done()
+			start := i * size
+			if start >= len(numbers) {
+				return
+			}
+			end := min(start+size, len(numbers))
+			sum := 0
+			for _, val := range numbers[start:end] {
+
+				sum += val * val
+			}
+			ch <- sum
+		}(i)
+	}
+	wg.Wait()
+	close(ch)
+	var result int
+	for val := range ch {
+		result += val
+	}
+	return result
 }

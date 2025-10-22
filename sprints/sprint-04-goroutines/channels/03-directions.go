@@ -36,19 +36,19 @@ func square(in <-chan int) <-chan int {
 }
 
 func main() {
-	fmt.Println("=== Channel Directions ===\n")
+	// fmt.Println("=== Channel Directions ===\n")
 
-	ch := make(chan string)
-	go sender(ch)
-	receiver(ch)
+	// ch := make(chan string)
+	// go sender(ch)
+	// receiver(ch)
 
-	fmt.Println("\n--- Pipeline Example ---")
-	numbers := generator(2, 3, 4)
-	squares := square(numbers)
+	// fmt.Println("\n--- Pipeline Example ---")
+	// numbers := generator(2, 3, 4)
+	// squares := square(numbers)
 
-	for result := range squares {
-		fmt.Printf("Square: %d\n", result)
-	}
+	// for result := range squares {
+	// 	fmt.Printf("Square: %d\n", result)
+	// }
 
 	fmt.Println("\n--- Simple Direction Example ---")
 	work := make(chan int)
@@ -65,13 +65,16 @@ func main() {
 func produce(out chan<- int) {
 	for i := 1; i <= 5; i++ {
 		out <- i
+		fmt.Printf("Writing i = %d\n", i)
 	}
 	close(out)
 }
 
 func process(in <-chan int, out chan<- int) {
 	for n := range in {
+		fmt.Printf("Reading n = %d\n", n)
 		out <- n * 2
+		fmt.Printf("Sucessfully written out %d\n", n*2)
 	}
 	close(out)
 }
