@@ -19,28 +19,28 @@ import (
 // WorkerPool processes jobs using fixed number of workers
 func WorkerPool(jobs []int, numWorkers int) []int {
 	// TODO: Implement worker pool
-	if len(jobs) == 0 {
+	if len(jobs) == 0 || numWorkers <= 0 {
 		return []int{}
 	}
 	var wg sync.WaitGroup
 	resulslice := []int{}
 	// 1. Create jobs channel and results channel
 	jobch := make(chan int, len(jobs))
-	results := make(chan int, len(jobs))
+
 	// 2. Start fixed number of worker goroutines
 	// 3. Each worker reads from jobs channel, processes job, sends to results
-	for i := 0; i < numWorkers; i++ {
+	for i := 0; i < len(jobs); i++ {
 		wg.Add(1)
 		go func(i int) {
 			defer wg.Done()
-			results <- <-jobch
-			resultint := <-results
+			jobch <- jobs[i] * 2
+			resultint := <-jobch
 			resulslice = append(resulslice, resultint)
 		}(i)
+
 	}
 	wg.Wait()
 	close(jobch)
-	close(results)
 
 	// 4. Send all jobs to jobs channel and close it
 	// 5. Collect all results from results channel
