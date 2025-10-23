@@ -23,6 +23,7 @@ func WorkerPool(jobs []int, numWorkers int) []int {
 		return []int{}
 	}
 	var wg sync.WaitGroup
+	tokench := make(chan int, numWorkers)
 	resulslice := []int{}
 	// 1. Create jobs channel and results channel
 	jobch := make(chan int, len(jobs))
@@ -30,18 +31,19 @@ func WorkerPool(jobs []int, numWorkers int) []int {
 	// 2. Start fixed number of worker goroutines
 	// 3. Each worker reads from jobs channel, processes job, sends to results
 	for i := 0; i < len(jobs); i++ {
+		tokench <- 1
 		wg.Add(1)
 		go func(i int) {
 			defer wg.Done()
 			jobch <- jobs[i] * 2
 			resultint := <-jobch
 			resulslice = append(resulslice, resultint)
+			<-tokench
 		}(i)
 
 	}
 	wg.Wait()
 	close(jobch)
-
 	// 4. Send all jobs to jobs channel and close it
 	// 5. Collect all results from results channel
 	// 6. Return results slice

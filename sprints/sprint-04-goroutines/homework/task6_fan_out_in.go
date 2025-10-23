@@ -12,9 +12,19 @@ package homework
 
 // FanOutFanIn distributes work across workers and collects results
 func FanOutFanIn(numbers []int, numWorkers int) []int {
+	if len(numbers) == 0 || numWorkers <= 0 {
+		return []int{}
+	}
+
+	//var wg sync.WaitGroup
 	// TODO: Implement fan-out/fan-in pattern
 	// 1. Create input channel for distributing work
+	//inputch := make(chan int, len(numbers))
+	//outputch := make(chan int, len(numbers))
 	// 2. Start multiple worker goroutines reading from input channel
+	for i := 0; i < len(numbers); i++ {
+
+	}
 	// 3. Each worker processes numbers and sends to its output channel
 	// 4. Merge all worker output channels into single channel
 	// 5. Collect all results from merged channel
