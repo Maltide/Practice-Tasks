@@ -813,6 +813,66 @@ func BenchmarkConcurrentDownloader(b *testing.B) {
 	}
 }
 
+// Tests for helper functions
+func TestNewMockHTTPClient(t *testing.T) {
+	client := NewMockHTTPClient()
+	if client == nil {
+		t.Error("NewMockHTTPClient() returned nil")
+	}
+	if client.responses == nil {
+		t.Error("NewMockHTTPClient() responses map is nil")
+	}
+	if client.delays == nil {
+		t.Error("NewMockHTTPClient() delays map is nil")
+	}
+}
+
+func TestMockHTTPClient_Get(t *testing.T) {
+	client := NewMockHTTPClient()
+
+	t.Run("default response", func(t *testing.T) {
+		resp, err := client.Get("http://example.com")
+		if err != nil {
+			t.Errorf("Get() returned error: %v", err)
+		}
+		if resp.StatusCode != 200 {
+			t.Errorf("Get() status code = %d, want 200", resp.StatusCode)
+		}
+	})
+}
+
+// Tests for FetchWithRetry
+func TestFetchWithRetry(t *testing.T) {
+	tests := []struct {
+		name        string
+		url         string
+		maxRetries  int
+		timeout     time.Duration
+		expectError bool
+	}{
+		{
+			name:        "not implemented",
+			url:         "http://example.com",
+			maxRetries:  3,
+			timeout:     1 * time.Second,
+			expectError: false, // Currently returns 0, nil
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			status, err := FetchWithRetry(tt.url, tt.maxRetries, tt.timeout)
+			if (err != nil) != tt.expectError {
+				t.Errorf("FetchWithRetry() error = %v, expectError %v", err, tt.expectError)
+			}
+			// Currently returns 0, nil - this will change when implemented
+			if status != 0 {
+				t.Errorf("FetchWithRetry() status = %d, want 0 (not implemented)", status)
+			}
+		})
+	}
+}
+
 // Helper functions
 func makeRange(min, max int) []int {
 	result := make([]int, max-min+1)
