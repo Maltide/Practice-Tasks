@@ -1,5 +1,9 @@
 package homework
 
+import (
+	"sync"
+)
+
 // Task 6: Fan-Out/Fan-In Pattern
 //
 // OBJECTIVE: Distribute work to workers (fan-out), collect results (fan-in)
@@ -12,22 +16,37 @@ package homework
 
 // FanOutFanIn distributes work across workers and collects results
 func FanOutFanIn(numbers []int, numWorkers int) []int {
-	if len(numbers) == 0 || numWorkers <= 0 {
+	if len(numbers) == 0 || numWorkers <= 0 || numbers == nil {
 		return []int{}
 	}
-
-	//var wg sync.WaitGroup
+	var wg sync.WaitGroup
 	// TODO: Implement fan-out/fan-in pattern
 	// 1. Create input channel for distributing work
-	//inputch := make(chan int, len(numbers))
-	//outputch := make(chan int, len(numbers))
-	// 2. Start multiple worker goroutines reading from input channel
-	for i := 0; i < len(numbers); i++ {
+	//effective := min(len(numbers), numWorkers) //Аммортизация(?)
+	tokench := make(chan int, numWorkers)
 
+	outputch := make(chan int, len(numbers))
+
+	resultslice := []int{}
+	// 2. Start multiple worker goroutines reading from input channel
+
+	for i := 0; i < len(numbers); i++ {
+		tokench <- 1
+		wg.Add(1)
+		go func(i int) {
+			wg.Done()
+			outputch <- numbers[i] * 3
+			resultint := <-outputch
+			resultslice = append(resultslice, resultint)
+			<-tokench
+		}(i)
 	}
+	wg.Wait()
+	close(outputch)
+	close(tokench)
 	// 3. Each worker processes numbers and sends to its output channel
 	// 4. Merge all worker output channels into single channel
 	// 5. Collect all results from merged channel
 	// 6. Return results slice
-	return nil
+	return resultslice
 }
