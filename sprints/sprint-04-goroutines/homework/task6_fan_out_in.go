@@ -22,8 +22,8 @@ func FanOutFanIn(numbers []int, numWorkers int) []int {
 	var wg sync.WaitGroup
 	// TODO: Implement fan-out/fan-in pattern
 	// 1. Create input channel for distributing work
-	//effective := min(len(numbers), numWorkers) //Аммортизация(?)
-	tokench := make(chan int, numWorkers)
+	effective := min(len(numbers), numWorkers) //Аммортизация(?)
+	tokench := make(chan int, effective)
 
 	outputch := make(chan int, len(numbers))
 
@@ -34,7 +34,7 @@ func FanOutFanIn(numbers []int, numWorkers int) []int {
 		tokench <- 1
 		wg.Add(1)
 		go func(i int) {
-			wg.Done()
+			defer wg.Done()
 			outputch <- numbers[i] * 3
 			resultint := <-outputch
 			resultslice = append(resultslice, resultint)
