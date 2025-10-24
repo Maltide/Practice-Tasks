@@ -19,9 +19,9 @@ func ProcessPipeline(n int) <-chan int {
 	// 2. Pass its output channel to square function
 	// 3. Pass square output channel to filterEven function
 	// 4. Return the final output channel
-	genChan := generate(n)
-	squareChan := square(genChan)
-	return filterEven(squareChan)
+	out := make(chan int)
+
+	return out
 }
 
 func generate(n int) <-chan int {
@@ -32,19 +32,6 @@ func generate(n int) <-chan int {
 	// 4. Close channel when loop completes
 	// 5. Return output channel immediately
 	out := make(chan int)
-
-	// Handle edge case of n <= 0
-	if n <= 0 {
-		close(out)
-		return out
-	}
-
-	go func() {
-		for i := 1; i <= n; i++ {
-			out <- i
-		}
-		close(out)
-	}()
 
 	return out
 }
@@ -58,14 +45,6 @@ func square(in <-chan int) <-chan int {
 	// 5. Close output channel when input is exhausted
 	// 6. Return output channel immediately
 	out := make(chan int)
-
-	go func() {
-		for num := range in {
-			out <- num * num
-		}
-		close(out)
-	}()
-
 	return out
 }
 
@@ -78,15 +57,6 @@ func filterEven(in <-chan int) <-chan int {
 	// 5. Close output channel when input is exhausted
 	// 6. Return output channel immediately
 	out := make(chan int)
-
-	go func() {
-		for num := range in {
-			if num%2 == 0 {
-				out <- num
-			}
-		}
-		close(out)
-	}()
 
 	return out
 }

@@ -8,6 +8,7 @@ import (
 // Task 4: Worker Pool Pattern
 //
 // OBJECTIVE: Process jobs with fixed number of workers
+// PROCESSING RULE: Each job (number) should be doubled (multiplied by 2)
 //
 // PACKAGES TO USE:
 // - sync.WaitGroup: https://pkg.go.dev/sync#WaitGroup
@@ -15,6 +16,8 @@ import (
 //   ctx.Done() returns <-chan struct{} that closes on cancellation
 //
 // HINT: Create jobs channel, start workers, send jobs, collect results
+// NOTE: You can use a single channel for simplicity, or separate input/output channels
+// for clearer separation of concerns. Both approaches are valid.
 
 // WorkerPool processes jobs using fixed number of workers
 func WorkerPool(jobs []int, numWorkers int) []int {
