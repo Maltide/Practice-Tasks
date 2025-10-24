@@ -26,8 +26,8 @@ func FanOutFanIn(numbers []int, numWorkers int) []int {
 
 	// Create a semaphore channel to limit concurrent goroutines to numWorkers
 	// This ensures we don't exceed the specified worker limit
-	effective := min(len(numbers), numWorkers) // Use minimum of workers and numbers
-	tokench := make(chan int, effective)
+	//effective := min(len(numbers), numWorkers) // Use minimum of workers and numbers
+	tokench := make(chan int, numWorkers)
 
 	// Buffered channel to collect processed results
 	outputch := make(chan int, len(numbers))

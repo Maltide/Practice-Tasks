@@ -69,9 +69,22 @@ var ErrTimeout = errors.New("processing timeout exceeded")
 // ProcessWithTimeout processes data with a timeout
 func ProcessWithTimeout(data []int, timeout time.Duration) (int, error) {
 	// TODO: Implement processing with timeout
-	// 1. Create done channel for completion signal (e.g., chan struct{} or chan int for count)
 
+	// 1. Create done channel for completion signal (e.g., chan struct{} or chan int for count)
+	if timeout <= 0 {
+		return 0, ErrTimeout
+	}
+	if len(data) == 0 {
+		return 0, nil
+	}
+
+	count := 0
+
+	// 1. Create done channel for completion signal
+	donech := make(chan int, 1)
+	timech := time.After(timeout)
 	// 2. Launch goroutine to process all data items
+
 	//    Inside the goroutine:
 	//    a. Perform the processing (e.g., count items, simulate work)
 	//    b. Send a signal (e.g., count or struct{}) to the done channel when finished
@@ -87,5 +100,24 @@ func ProcessWithTimeout(data []int, timeout time.Duration) (int, error) {
 	// 6. Ensure no goroutines are leaked. The goroutine should finish naturally.
 	//    The select statement ensures that once one case is chosen, the function returns,
 	//    and the other branch (if still running) is effectively ignored by the function's scope.
-	return 0, nil
+
+	// 3. Use select statement with timeout channel
+	go func() {
+		for i := 0; i < len(data); i++ {
+			count++
+		}
+		donech <- count
+	}()
+
+	select {
+	case <-donech:
+		return count, nil
+	case <-timech:
+		return 0, ErrTimeout
+	}
+
+	// 4. If done channel receives first, return count
+	// 5. If timeout channel receives first, return error
+	// 6. Return processed count or timeout error
+
 }
