@@ -80,8 +80,15 @@ lint-install:
 	fi
 
 fmt:
-	@echo "Formatting code with gofmt..."
-	gofmt -s -w .
+	@echo "Formatting code..."
+	@files=$$(gofmt -s -l ./homework); \
+	if [ -z "$$files" ]; then \
+		echo "✅ All Go files are already formatted."; \
+	else \
+		echo "🛠  Formatting files..."; \
+		echo "$$files" | xargs gofmt -s -w; \
+		echo "Done."; \
+	fi
 
 vet:
 	@echo "Running go vet..."
