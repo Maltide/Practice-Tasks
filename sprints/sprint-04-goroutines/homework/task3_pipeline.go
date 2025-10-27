@@ -1,7 +1,5 @@
 package homework
 
-import "fmt"
-
 // Task 3: Pipeline Pattern
 //
 // OBJECTIVE: Create 3-stage pipeline: generate → square → filter even
@@ -77,10 +75,10 @@ func filterEven(in <-chan int) <-chan int {
 		for val := range in {
 			// 3. For each number, check if it's even
 			if val%2 == 0 {
-				fmt.Printf("even val № %v\n", val)
+				// fmt.Printf("even val № %v\n", val)
 				// 4. Send only even numbers to output channel
 				out <- val
-				fmt.Printf("send ")
+				// fmt.Printf("send ")
 			}
 		}
 		// 5. Close output channel when input is exhausted
