@@ -1,8 +1,6 @@
 name: Homework test
 
 on:
-  push:
-    branches: [ main, sprint-* ]
   pull_request:
     branches: [ main, sprint-* ]
 
