@@ -17,7 +17,19 @@ jobs:
           go-version: '1.25'
 
       - name: Run unit tests
-        run: go list ./... | grep '/homework/' | xargs -r go test -v
+        run: |
+          echo "Finding homework test packages..."
+          PKGS=$(go list ./... | grep '/homework/' || true)
+
+          if [ -z "$PKGS" ]; then
+            echo "⚠️  No homework packages found."
+            exit 0
+          fi
+
+          echo "Running tests for packages:"
+          echo "$PKGS" | sed 's/^/  • /'
+
+          go test -v $PKGS
         env:
           GO111MODULE: off
 
