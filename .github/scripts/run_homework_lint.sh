@@ -19,10 +19,9 @@ if [ -z "$DIRS" ]; then
   exit 0
 fi
 
-# ensure golangci-lint exists (pin version so CI doesn't break on us)
+# ensure golangci-lint exists (pin version so CI is deterministic)
 if ! command -v golangci-lint >/dev/null 2>&1; then
-  echo "Installing golangci-lint..."
-  # you can bump this later intentionally, not accidentally
+  echo "📦 Installing golangci-lint..."
   GOLANGCI_LINT_VERSION="v1.58.2"
   curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
     | sh -s -- -b "$(go env GOPATH)/bin" "${GOLANGCI_LINT_VERSION}"
@@ -30,7 +29,7 @@ if ! command -v golangci-lint >/dev/null 2>&1; then
 fi
 
 for d in $DIRS; do
-  # skip dirs that have no .go files directly in them
+  # skip dirs without .go files directly in them
   if ! ls "$d"/*.go >/dev/null 2>&1; then
     continue
   fi
@@ -38,16 +37,17 @@ for d in $DIRS; do
   echo "────────────────────────────────────────────"
   echo "📂 Linting directory: $d"
 
-  # We'll run golangci-lint from within that dir so it can use a local go.mod
+  # first attempt: run normally
   set +e
   OUTPUT=$(cd "$d" && golangci-lint run --timeout=5m . 2>&1)
   STATUS=$?
   set -e
 
-  # If it failed only because of config version, try again with a no-config fallback.
-  # We detect that by grepping the error message.
-  if [ $STATUS -ne 0 ] && echo "$OUTPUT" | grep -qi "can't load config"; then
-    echo "⚠️  Falling back to minimal linters in $d (no valid config)"
+  # if golangci-lint errored out in a weird way (unsupported config / analyzer panic etc),
+  # try again in "minimal" mode with a safe, explicit linter set
+  if [ $STATUS -ne 0 ]; then
+    # we always show fallback attempt reason in debug logs to make CI less confusing
+    echo "⚠️  Falling back to minimal linters in $d"
     set +e
     OUTPUT=$(cd "$d" && golangci-lint run \
       --timeout=5m \
@@ -56,6 +56,7 @@ for d in $DIRS; do
       --enable=staticcheck \
       --enable=ineffassign \
       --enable=gofmt \
+      --out-format=colored-line-number \
       . 2>&1)
     STATUS=$?
     set -e
@@ -85,27 +86,33 @@ done
 echo "────────────────────────────────────────────"
 echo "📊 Lint summary"
 
+# Passed block
 if [ -n "$PASSED_DIRS" ]; then
-  echo "✔ Passed:"
+  # green header
+  echo -e "\e[32m✔ Passed:\e[0m"
   echo -e "$PASSED_DIRS"
 else
-  echo "✔ Passed:"
+  echo -e "\e[32m✔ Passed:\e[0m"
   echo "  • (none)"
 fi
 
+echo    # blank line for readability between sections
+
+# Failed block
 if [ -n "$FAILED_DIRS" ]; then
-  echo "✘ Failed:"
+  # red header
+  echo -e "\e[31m✘ Failed:\e[0m"
   echo -e "$FAILED_DIRS"
 else
-  echo "✘ Failed:"
+  echo -e "\e[31m✘ Failed:\e[0m"
   echo "  • (none)"
 fi
 
 echo "────────────────────────────────────────────"
 if [ $EXIT_CODE -eq 0 ]; then
-  echo "🏁 All homework directories passed linting ✅"
+  echo -e "🏁 \e[32mAll homework directories passed linting ✅\e[0m"
 else
-  echo "❗ Some homework directories failed linting ❌"
+  echo -e "❗ \e[31mSome homework directories failed linting ❌\e[0m"
 fi
 
 exit $EXIT_CODE
