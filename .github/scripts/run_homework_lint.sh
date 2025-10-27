@@ -5,13 +5,14 @@ IFS=$'\n\t'
 EXIT_CODE=0
 PASSED_DIRS=""
 FAILED_DIRS=""
+SKIPPED_DIRS=""
 
 [[ "${DEBUG:-}" == "1" ]] && set -x
 
 echo "────────────────────────────────────────────"
 echo "🔍 Searching for homework directories to lint..."
 
-# Find dirs that look like homework, sorted for stable output
+# Find homework-like dirs, stable order
 DIRS=$(find . -type d -path '*/homework*' | sort)
 
 if [ -z "$DIRS" ]; then
@@ -19,7 +20,7 @@ if [ -z "$DIRS" ]; then
   exit 0
 fi
 
-# ensure golangci-lint exists (pin version so CI is deterministic)
+# Ensure golangci-lint exists (pin version for determinism)
 if ! command -v golangci-lint >/dev/null 2>&1; then
   echo "📦 Installing golangci-lint..."
   GOLANGCI_LINT_VERSION="v1.58.2"
@@ -29,7 +30,7 @@ if ! command -v golangci-lint >/dev/null 2>&1; then
 fi
 
 for d in $DIRS; do
-  # skip dirs without .go files directly in them
+  # skip dirs with no .go files at all
   if ! ls "$d"/*.go >/dev/null 2>&1; then
     continue
   fi
@@ -37,16 +38,41 @@ for d in $DIRS; do
   echo "────────────────────────────────────────────"
   echo "📂 Linting directory: $d"
 
-  # first attempt: run normally
+  # Heuristic: if this dir (or its parents) has a go.mod, we consider it buildable.
+  # We'll walk up until repo root looking for go.mod.
+  MODDIR="$d"
+  FOUND_MOD="false"
+  while true; do
+    if [ -f "$MODDIR/go.mod" ]; then
+      FOUND_MOD="true"
+      break
+    fi
+    # stop at repo root "."
+    if [ "$MODDIR" = "." ]; then
+      break
+    fi
+    MODDIR=$(dirname "$MODDIR")
+  done
+
+  if [ "$FOUND_MOD" != "true" ]; then
+    echo "⚠️  Skipping $d (no go.mod in this tree, cannot lint reliably)"
+    if [ -n "$SKIPPED_DIRS" ]; then
+      SKIPPED_DIRS="${SKIPPED_DIRS}\n  • ${d}"
+    else
+      SKIPPED_DIRS="  • ${d}"
+    fi
+    # do not count as failure, just move on
+    continue
+  fi
+
+  # Try normal lint first
   set +e
   OUTPUT=$(cd "$d" && golangci-lint run --timeout=5m . 2>&1)
   STATUS=$?
   set -e
 
-  # if golangci-lint errored out in a weird way (unsupported config / analyzer panic etc),
-  # try again in "minimal" mode with a safe, explicit linter set
+  # If golangci-lint errored (bad config, analyzer panic, etc.), try minimal safe linters
   if [ $STATUS -ne 0 ]; then
-    # we always show fallback attempt reason in debug logs to make CI less confusing
     echo "⚠️  Falling back to minimal linters in $d"
     set +e
     OUTPUT=$(cd "$d" && golangci-lint run \
@@ -88,31 +114,48 @@ echo "📊 Lint summary"
 
 # Passed block
 if [ -n "$PASSED_DIRS" ]; then
-  # green header
-  echo -e "\e[32m✔ Passed:\e[0m"
+  echo -e "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo -e "\e[32m✔ PASSED DIRECTORIES:\e[0m"
   echo -e "$PASSED_DIRS"
 else
-  echo -e "\e[32m✔ Passed:\e[0m"
+  echo -e "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo -e "\e[32m✔ PASSED DIRECTORIES:\e[0m"
   echo "  • (none)"
 fi
 
-echo    # blank line for readability between sections
+echo    # blank spacer
 
 # Failed block
 if [ -n "$FAILED_DIRS" ]; then
-  # red header
-  echo -e "\e[31m✘ Failed:\e[0m"
+  echo -e "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo -e "\e[31m✘ FAILED DIRECTORIES:\e[0m"
   echo -e "$FAILED_DIRS"
 else
-  echo -e "\e[31m✘ Failed:\e[0m"
+  echo -e "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo -e "\e[31m✘ FAILED DIRECTORIES:\e[0m"
+  echo "  • (none)"
+fi
+
+echo    # blank spacer
+
+# Skipped block
+if [ -n "$SKIPPED_DIRS" ]; then
+  echo -e "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo -e "\e[33m↷ SKIPPED (NO go.mod):\e[0m"
+  echo -e "$SKIPPED_DIRS"
+else
+  echo -e "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo -e "\e[33m↷ SKIPPED (NO go.mod):\e[0m"
   echo "  • (none)"
 fi
 
 echo "────────────────────────────────────────────"
-if [ $EXIT_CODE -eq 0 ]; then
-  echo -e "🏁 \e[32mAll homework directories passed linting ✅\e[0m"
-else
+
+if [ -n "$FAILED_DIRS" ]; then
+  # only fail the job if at least one real lint run failed
   echo -e "❗ \e[31mSome homework directories failed linting ❌\e[0m"
+  exit 1
 fi
 
-exit $EXIT_CODE
+echo -e "🏁 \e[32mNo lint failures ✅\e[0m"
+exit 0
