@@ -20,15 +20,12 @@ if [ -z "$DIRS" ]; then
   exit 0
 fi
 
-# Ensure golangci-lint exists (pin version for determinism)
 if ! command -v golangci-lint >/dev/null 2>&1; then
-  echo "📦 Installing golangci-lint..."
-  GOLANGCI_LINT_VERSION="v1.58.2"
+  echo "📦 Installing golangci-lint (latest)..."
   curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
-    | sh -s -- -b "$(go env GOPATH)/bin" "${GOLANGCI_LINT_VERSION}"
+    | sh -s -- -b "$(go env GOPATH)/bin" latest
   export PATH="$(go env GOPATH)/bin:$PATH"
 fi
-
 for d in $DIRS; do
   # skip dirs with no .go files at all
   if ! ls "$d"/*.go >/dev/null 2>&1; then
