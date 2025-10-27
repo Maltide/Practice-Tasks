@@ -36,5 +36,5 @@ jobs:
         uses: golangci/golangci-lint-action@v6
         with:
           version: latest
-          working-directory: sprints/sprint-04-goroutines
+          working-directory: sprints/sprint-04-goroutines/homework
           args: --timeout=5m
