@@ -33,10 +33,6 @@ linters-settings:
     check-type-assertions: false
 
 
-  govet:
-    # Report about shadowed variables
-    check-shadowing: true
-
   revive:
     # Enable all available rules
     enable-all-rules: false
