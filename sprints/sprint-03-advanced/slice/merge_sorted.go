@@ -1,4 +1,4 @@
-package slice
+package problems
 
 // MergeSorted объединяет два отсортированных слайса в один отсортированный слайс.
 //

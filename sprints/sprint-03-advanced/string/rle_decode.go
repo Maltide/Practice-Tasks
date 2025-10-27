@@ -1,4 +1,4 @@
-package stringsprint
+package problems
 
 import (
 	"fmt"

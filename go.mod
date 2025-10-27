@@ -1,3 +1,3 @@
-module example.com/practice-tasks
+module github.com/Maltide/Practice-Tasks
 
 go 1.25.1

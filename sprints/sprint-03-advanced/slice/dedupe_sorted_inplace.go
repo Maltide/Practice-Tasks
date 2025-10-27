@@ -1,4 +1,4 @@
-package slice
+package problems
 
 // DedupeSortedInPlace удаляет дубликаты из отсортированного слайса "на месте".
 //

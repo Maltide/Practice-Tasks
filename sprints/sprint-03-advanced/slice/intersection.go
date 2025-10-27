@@ -1,6 +1,4 @@
-package slice
-
-import "fmt"
+package problems
 
 // IntersectionUnique находит пересечение двух слайсов целых чисел, возвращая уникальные значения.
 //
@@ -63,8 +61,6 @@ func IntersectionUnique(a, b []int) []int {
 				resultslice = append(resultslice, val)
 				duplicate[val] = true
 			}
-			fmt.Printf("Biggestslice: %v\n", biggestslice)
-			fmt.Printf("Duplicate: %v\n", duplicate)
 		}
 
 	} else {
@@ -80,8 +76,6 @@ func IntersectionUnique(a, b []int) []int {
 				duplicate[val] = true
 			}
 		}
-		fmt.Printf("Biggestslice: %v\n", biggestslice)
-		fmt.Printf("Duplicate: %v\n", duplicate)
 	}
 	if len(resultslice) == 0 {
 		return nil

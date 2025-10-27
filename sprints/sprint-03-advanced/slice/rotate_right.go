@@ -1,4 +1,4 @@
-package slice
+package problems
 
 // RotateRight поворачивает слайс вправо на k позиций.
 //

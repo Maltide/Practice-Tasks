@@ -1,4 +1,4 @@
-package stringsprint
+package problems
 
 // FirstUniqueCharIndex находит индекс первого неповторяющегося символа в строке.
 //

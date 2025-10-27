@@ -1,4 +1,6 @@
-package stringsprint
+package problems
+
+import "strings"
 
 // LongestCommonPrefix находит самый длинный общий префикс среди массива строк.
 //
@@ -55,7 +57,7 @@ func LongestCommonPrefix(words []string) string {
 	}
 
 	firstword := words[0]
-	prefix := []byte{} // flower, checking flow
+	var prefix strings.Builder
 	var flag bool
 	for i := 0; i < len(firstword); i++ {
 		flag = true
@@ -68,8 +70,8 @@ func LongestCommonPrefix(words []string) string {
 		if !flag {
 			break
 		}
-		prefix = append(prefix, []byte(firstword)[i])
+		prefix.WriteByte(firstword[i])
 	}
 
-	return string(prefix)
+	return prefix.String()
 }

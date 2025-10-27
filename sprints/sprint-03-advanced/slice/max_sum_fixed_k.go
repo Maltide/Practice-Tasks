@@ -1,4 +1,4 @@
-package slice
+package problems
 
 // MaxSumFixedK находит максимальную сумму подмассива фиксированной длины k.
 //

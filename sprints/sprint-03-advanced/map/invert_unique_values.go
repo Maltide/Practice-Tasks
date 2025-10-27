@@ -1,4 +1,4 @@
-package mapsprint
+package problems
 
 // InvertUnique инвертирует map, меняя местами ключи и значения.
 //

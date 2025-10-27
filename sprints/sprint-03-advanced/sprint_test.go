@@ -6,10 +6,10 @@ import (
 	"testing"
 
 	// Import functions from subdirectories
-	mapsprint "example.com/practice-tasks/sprints/sprint-03-advanced/map"
-	mixed "example.com/practice-tasks/sprints/sprint-03-advanced/mixed"
-	slice "example.com/practice-tasks/sprints/sprint-03-advanced/slice"
-	stringsprint "example.com/practice-tasks/sprints/sprint-03-advanced/string"
+	mapsprint "github.com/Maltide/Practice-Tasks/sprints/sprint-03-advanced/map"
+	mixed "github.com/Maltide/Practice-Tasks/sprints/sprint-03-advanced/mixed"
+	slice "github.com/Maltide/Practice-Tasks/sprints/sprint-03-advanced/slice"
+	stringsprint "github.com/Maltide/Practice-Tasks/sprints/sprint-03-advanced/string"
 )
 
 // Test 1: Intersection of Two Slices
