@@ -38,7 +38,7 @@ for d in $DIRS; do
 
   {
     set +e
-    OUTPUT=$(cd "$d" && golangci-lint run --timeout=5m --out-format=colored-line-number . 2>&1)
+    OUTPUT=$(cd "$d" && golangci-lint run --timeout=5m . 2>&1)
     STATUS=$?
     set -e
   }
@@ -61,8 +61,8 @@ echo "📊 Lint summary"
 
 if [ -n "$PASSED_DIRS" ]; then
   echo "✔ Passed:"
-  # echo -e is bashism but we're already running bash
-  echo -e "$PASSED_DIRS"
+  # remove possible leading newline before printing
+  echo -e "${PASSED_DIRS#\\n}"
 else
   echo "✔ Passed:"
   echo "  • (none)"
@@ -70,7 +70,7 @@ fi
 
 if [ -n "$FAILED_DIRS" ]; then
   echo "✘ Failed:"
-  echo -e "$FAILED_DIRS"
+  echo -e "${FAILED_DIRS#\\n}"
 else
   echo "✘ Failed:"
   echo "  • (none)"
