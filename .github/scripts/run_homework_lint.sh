@@ -136,19 +136,6 @@ else
   echo "  • (none)"
 fi
 
-echo    # blank spacer
-
-# Skipped block
-if [ -n "$SKIPPED_DIRS" ]; then
-  echo -e "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-  echo -e "\e[33m↷ SKIPPED (NO go.mod):\e[0m"
-  echo -e "$SKIPPED_DIRS"
-else
-  echo -e "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-  echo -e "\e[33m↷ SKIPPED (NO go.mod):\e[0m"
-  echo "  • (none)"
-fi
-
 echo "────────────────────────────────────────────"
 
 if [ -n "$FAILED_DIRS" ]; then
