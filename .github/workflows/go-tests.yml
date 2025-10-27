@@ -18,18 +18,30 @@ jobs:
 
       - name: Run unit tests
         run: |
-          echo "Finding homework test packages..."
-          PKGS=$(go list ./... | grep '/homework/' || true)
+          echo "Looking for homework test directories..."
 
-          if [ -z "$PKGS" ]; then
-            echo "⚠️  No homework packages found."
+          # find all directories with 'homework' in the path
+          DIRS=$(find . -type d -path '*/homework*')
+
+          if [ -z "$DIRS" ]; then
+            echo "⚠️  No homework directories found."
             exit 0
           fi
 
-          echo "Running tests for packages:"
-          echo "$PKGS" | sed 's/^/  • /'
+          EXIT_CODE=0
 
-          go test -v $PKGS
+          for d in $DIRS; do
+            # check if the dir even has *_test.go files
+            if ls "$d"/*_test.go >/dev/null 2>&1; then
+              echo "────────────────────────────────"
+              echo "Running tests in: $d"
+              (cd "$d" && go test -v .) || EXIT_CODE=$?
+            else
+              echo "Skipping $d (no tests)"
+            fi
+          done
+
+          exit $EXIT_CODE
         env:
           GO111MODULE: off
 
