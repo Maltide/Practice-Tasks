@@ -46,30 +46,37 @@ for d in $DIRS; do
 done
 
 echo "────────────────────────────────────────────"
-echo "📊 Test summary"
+echo "📊 Lint summary"
 
+# Passed block
 if [ -n "$PASSED_DIRS" ]; then
-  echo "✅ Passed:"
-  # remove possible leading newline before printing
-  echo -e "${PASSED_DIRS#\\n}"
+  # green header
+  echo -e "\e[32m✔ Passed:\e[0m"
+  echo -e "$PASSED_DIRS"
 else
-  echo "✅ Passed:"
+  echo -e "\e[32m✔ Passed:\e[0m"
   echo "  • (none)"
 fi
 
+echo    # blank line for readability between sections
+
+# Failed block
 if [ -n "$FAILED_DIRS" ]; then
-  echo "❌ Failed:"
-  echo -e "${FAILED_DIRS#\\n}"
+  # red header
+  echo -e "\e[31m✘ Failed:\e[0m"
+  echo -e "$FAILED_DIRS"
 else
-  echo "❌ Failed:"
+  echo -e "\e[31m✘ Failed:\e[0m"
   echo "  • (none)"
 fi
 
 echo "────────────────────────────────────────────"
 if [ $EXIT_CODE -eq 0 ]; then
-  echo "🏁 All homework directories passed tests ✅"
+  echo -e "🏁 \e[32mAll homework directories passed tests ✅\e[0m"
 else
-  echo "❗ Some homework directories failed tests ❌"
+  echo -e "❗ \e[31mSome homework directories failed tests ❌\e[0m"
 fi
+
+
 
 exit $EXIT_CODE
