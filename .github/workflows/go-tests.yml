@@ -1,4 +1,4 @@
-name: Go Tests
+name: Go Tests and Linting
 
 on:
   pull_request:
@@ -16,7 +16,66 @@ jobs:
         with:
           go-version: '1.25'
 
-      - name: Run unit tests
-        run: go test ./...
+      - name: Run homework tests file-by-file
+        run: |
+          echo "Looking for homework test files..."
+
+          # collect all *_test.go files under any directory with 'homework' in its path
+          TESTFILES=$(find . -type f -path '*/homework/*_test.go')
+
+          if [ -z "$TESTFILES" ]; then
+            echo "⚠️  No homework test files found."
+            exit 0
+          fi
+
+          EXIT_CODE=0
+
+          for tf in $TESTFILES; do
+            DIR=$(dirname "$tf")
+            FILE=$(basename "$tf")
+
+            echo "────────────────────────────────"
+            echo "Testing $tf"
+
+            # run the test for just this file, capture output
+            OUTPUT=$(cd "$DIR" && go test -v "./$FILE" 2>&1)
+            STATUS=$?
+
+            if [ $STATUS -eq 0 ]; then
+              echo "✅ PASS $tf"
+            else
+              echo "❌ FAIL $tf"
+              echo "▼ Full output from $tf"
+              echo "$OUTPUT"
+              EXIT_CODE=$STATUS
+            fi
+          done
+
+          echo "────────────────────────────────"
+          if [ $EXIT_CODE -eq 0 ]; then
+            echo "All homework test files passed ✅"
+          else
+            echo "Some homework test files failed ❌"
+          fi
+
+          exit $EXIT_CODE
         env:
           GO111MODULE: off
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25'
+
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: latest
+          working-directory: sprints/sprint-04-goroutines/homework
+          args: --timeout=5m
