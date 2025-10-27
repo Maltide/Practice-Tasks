@@ -46,22 +46,22 @@ func RateLimitedProcessor(items []string, maxPerSecond int) <-chan string {
 		return ch
 	}
 	ticker := time.NewTicker(time.Second / time.Duration(maxPerSecond))
-	fmt.Printf("ticker = %v\n", ticker)
+	// fmt.Printf("ticker = %v\n", ticker)
 
 	go func() {
 
 		fmt.Println("Starting for loop")
 		for i := 0; i < len(items); i++ {
-			fmt.Println("Trying to read signal from ticker.C")
+			// fmt.Println("Trying to read signal from ticker.C")
 			<-ticker.C
-			fmt.Println("Signal was found")
+			// fmt.Println("Signal was found")
 			ch <- items[i]
-			fmt.Printf("current item %v was write in ch\n", items[i])
+			// fmt.Printf("current item %v was write in ch\n", items[i])
 		}
 		ticker.Stop()
-		fmt.Println("ticker stopped")
+		// fmt.Println("ticker stopped")
 		close(ch)
-		fmt.Println("channel closed")
+		// fmt.Println("channel closed")
 	}()
 
 	return ch
