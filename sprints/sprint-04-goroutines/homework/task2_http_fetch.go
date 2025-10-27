@@ -3,7 +3,6 @@ package homework
 import (
 	"context"
 	"errors"
-	"fmt"
 	"net/http"
 	"sync"
 	"time"
@@ -39,7 +38,7 @@ func FetchURLs(urls []string, timeout time.Duration) (map[string]int, error) {
 		return make(map[string]int), nil
 	}
 
-	fmt.Printf("Run FetchURLs on %v\n", urls)
+	// fmt.Printf("Run FetchURLs on %v\n", urls)
 
 	type result struct {
 		url    string
@@ -58,9 +57,9 @@ func FetchURLs(urls []string, timeout time.Duration) (map[string]int, error) {
 		wg.Add(1)
 		go func(url string) {
 			defer wg.Done()
-			fmt.Printf("Starting goroutine with url %v\n", url)
+			// fmt.Printf("Starting goroutine with url %v\n", url)
 			resp, err := client.Get(url)
-			fmt.Printf("url %v; err = %v, resp = %v\n", url, err, resp)
+			// fmt.Printf("url %v; err = %v, resp = %v\n", url, err, resp)
 			if err != nil {
 				ch <- result{url: url, status: 0, err: err}
 				return
@@ -72,7 +71,7 @@ func FetchURLs(urls []string, timeout time.Duration) (map[string]int, error) {
 				status: statusCode,
 				err:    err,
 			}
-			fmt.Printf("url: %v, statuscode: %v, err: %v", res.url, res.status, res.err)
+			// fmt.Printf("url: %v, statuscode: %v, err: %v", res.url, res.status, res.err)
 			ch <- res
 		}(u)
 	}
@@ -80,7 +79,7 @@ func FetchURLs(urls []string, timeout time.Duration) (map[string]int, error) {
 	wg.Wait()
 	close(ch)
 	for res := range ch {
-		fmt.Printf("res found in channel = %v\n", res)
+		// fmt.Printf("res found in channel = %v\n", res)
 		if res.err != nil {
 			if errors.Is(res.err, context.DeadlineExceeded) {
 				return m, res.err
