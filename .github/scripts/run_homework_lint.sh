@@ -12,7 +12,6 @@ SKIPPED_DIRS=""
 echo "────────────────────────────────────────────"
 echo "🔍 Searching for homework directories to lint..."
 
-# Find homework-like dirs, stable order
 DIRS=$(find . -type d -path '*/homework*' | sort)
 
 if [ -z "$DIRS" ]; then
@@ -20,12 +19,14 @@ if [ -z "$DIRS" ]; then
   exit 0
 fi
 
+# install latest golangci-lint if missing
 if ! command -v golangci-lint >/dev/null 2>&1; then
   echo "📦 Installing golangci-lint (latest)..."
   curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
     | sh -s -- -b "$(go env GOPATH)/bin" latest
   export PATH="$(go env GOPATH)/bin:$PATH"
 fi
+
 for d in $DIRS; do
   # skip dirs with no .go files at all
   if ! ls "$d"/*.go >/dev/null 2>&1; then
@@ -35,111 +36,97 @@ for d in $DIRS; do
   echo "────────────────────────────────────────────"
   echo "📂 Linting directory: $d"
 
-  # Heuristic: if this dir (or its parents) has a go.mod, we consider it buildable.
-  # We'll walk up until repo root looking for go.mod.
-  MODDIR="$d"
-  FOUND_MOD="false"
-  while true; do
-    if [ -f "$MODDIR/go.mod" ]; then
-      FOUND_MOD="true"
-      break
-    fi
-    # stop at repo root "."
-    if [ "$MODDIR" = "." ]; then
-      break
-    fi
-    MODDIR=$(dirname "$MODDIR")
-  done
-
-  if [ "$FOUND_MOD" != "true" ]; then
-    echo "⚠️  Skipping $d (no go.mod in this tree, cannot lint reliably)"
-    if [ -n "$SKIPPED_DIRS" ]; then
-      SKIPPED_DIRS="${SKIPPED_DIRS}\n  • ${d}"
-    else
-      SKIPPED_DIRS="  • ${d}"
-    fi
-    # do not count as failure, just move on
-    continue
-  fi
-
-  # Try normal lint first
+  # First attempt: normal run with all default linters
   set +e
   OUTPUT=$(cd "$d" && golangci-lint run --timeout=5m . 2>&1)
   STATUS=$?
   set -e
 
-  # If golangci-lint errored (bad config, analyzer panic, etc.), try minimal safe linters
+  # If that fails, do a reduced run with only a safe subset of linters.
+  # v2 syntax: --only-use=<comma-separated>
   if [ $STATUS -ne 0 ]; then
     echo "⚠️  Falling back to minimal linters in $d"
     set +e
     OUTPUT=$(cd "$d" && golangci-lint run \
       --timeout=5m \
-      --disable-all \
-      --enable=govet \
-      --enable=staticcheck \
-      --enable=ineffassign \
-      --enable=gofmt \
-      --out-format=colored-line-number \
+      --only-use=govet,staticcheck,ineffassign,gofmt \
       . 2>&1)
     STATUS=$?
     set -e
   fi
 
+  # Classify results
+
   if [ $STATUS -eq 0 ]; then
+    # Lint succeeded, no findings
     echo "✅ PASS $d"
     if [ -n "$PASSED_DIRS" ]; then
       PASSED_DIRS="${PASSED_DIRS}\n  • ${d}"
     else
       PASSED_DIRS="  • ${d}"
     fi
-  else
-    echo "❌ FAIL $d"
-    echo "▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼"
-    echo "$OUTPUT"
-    echo "▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲"
-    if [ -n "$FAILED_DIRS" ]; then
-      FAILED_DIRS="${FAILED_DIRS}\n  • ${d}"
-    else
-      FAILED_DIRS="  • ${d}"
-    fi
-    EXIT_CODE=$STATUS
+    continue
   fi
+
+  # Detect toolchain / analyzer crash vs real lint failures.
+  # Crash case example: "internal/goarch ... unsupported version"
+  if echo "$OUTPUT" | grep -qi 'internal/goarch'; then
+    echo "⚠️  SKIP $d (toolchain mismatch: golangci-lint vs Go stdlib)"
+    if [ -n "$SKIPPED_DIRS" ]; then
+      SKIPPED_DIRS="${SKIPPED_DIRS}\n  • ${d}"
+    else
+      SKIPPED_DIRS="  • ${d}"
+    fi
+    # Don't fail the pipeline for this.
+    continue
+  fi
+
+  # Otherwise, this is a real lint failure with actionable findings.
+  echo "❌ FAIL $d"
+  echo "▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼"
+  echo "$OUTPUT"
+  echo "▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲"
+
+  if [ -n "$FAILED_DIRS" ]; then
+    FAILED_DIRS="${FAILED_DIRS}\n  • ${d}"
+  else
+    FAILED_DIRS="  • ${d}"
+  fi
+  EXIT_CODE=1
 done
 
 echo "────────────────────────────────────────────"
 echo "📊 Lint summary"
 
-# Passed block
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "✔ PASSED DIRECTORIES:"
 if [ -n "$PASSED_DIRS" ]; then
-  echo -e "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-  echo -e "\e[32m✔ PASSED DIRECTORIES:\e[0m"
   echo -e "$PASSED_DIRS"
 else
-  echo -e "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-  echo -e "\e[32m✔ PASSED DIRECTORIES:\e[0m"
   echo "  • (none)"
 fi
 
-echo    # blank spacer
-
-# Failed block
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "✘ FAILED DIRECTORIES:"
 if [ -n "$FAILED_DIRS" ]; then
-  echo -e "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-  echo -e "\e[31m✘ FAILED DIRECTORIES:\e[0m"
   echo -e "$FAILED_DIRS"
 else
-  echo -e "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-  echo -e "\e[31m✘ FAILED DIRECTORIES:\e[0m"
+  echo "  • (none)"
+fi
+
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "↷ SKIPPED (TOOLCHAIN / ANALYZER MISMATCH):"
+if [ -n "$SKIPPED_DIRS" ]; then
+  echo -e "$SKIPPED_DIRS"
+else
   echo "  • (none)"
 fi
 
 echo "────────────────────────────────────────────"
-
 if [ -n "$FAILED_DIRS" ]; then
-  # only fail the job if at least one real lint run failed
-  echo -e "❗ \e[31mSome homework directories failed linting ❌\e[0m"
+  echo "❗ Some homework directories failed linting ❌"
   exit 1
 fi
 
-echo -e "🏁 \e[32mNo lint failures ✅\e[0m"
+echo "🏁 No lint failures ✅"
 exit 0
