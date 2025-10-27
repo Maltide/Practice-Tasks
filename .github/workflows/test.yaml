@@ -1,0 +1,26 @@
+name: Homework test
+
+on:
+  push:
+    branches: [ main, sprint-* ]
+  pull_request:
+    branches: [ main, sprint-* ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23' # or whatever version you're using
+
+      - name: Make test script executable
+        run: chmod +x .github/scripts/run_homework_tests.sh
+
+      - name: Run homework tests
+        run: .github/scripts/run_homework_tests.sh
