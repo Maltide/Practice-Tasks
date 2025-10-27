@@ -674,7 +674,7 @@ func TestProcessWithTimeout(t *testing.T) {
 	})
 
 	t.Run("times out", func(t *testing.T) {
-		data := makeRange(1, 100)
+		data := makeRange(1, 10000000)
 		_, err := ProcessWithTimeout(data, 1*time.Millisecond)
 
 		if err == nil {
