@@ -1,3 +1,5 @@
+version: 2
+
 run:
   # Timeout for analysis
   timeout: 5m
@@ -10,14 +12,14 @@ linters:
   enable:
     # Default linters enabled by golangci-lint
     - errcheck
-    - gosimple
+    # - gosimple
     - govet
     - ineffassign
     - staticcheck
     - unused
   
     # Additional useful linters
-    - gofmt
+    # - gofmt
     - misspell
     - revive
     - unconvert
