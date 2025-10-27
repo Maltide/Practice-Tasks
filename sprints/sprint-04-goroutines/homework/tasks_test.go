@@ -15,7 +15,7 @@ func TestParallelSum(t *testing.T) {
 		workers  int
 		expected int
 	}{
-		{"empty slice", []int{}, 2, 1},
+		{"empty slice", []int{}, 2, 0},
 		{"nil slice", nil, 2, 0},
 		{"single element", []int{5}, 1, 5},
 		{"small slice", []int{1, 2, 3, 4, 5}, 2, 15},
