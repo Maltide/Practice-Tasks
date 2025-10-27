@@ -60,19 +60,19 @@ echo "────────────────────────�
 echo "📊 Lint summary"
 
 if [ -n "$PASSED_DIRS" ]; then
-  echo "✔ Passed:"
+  echo "✅ Passed:"
   # remove possible leading newline before printing
   echo -e "${PASSED_DIRS#\\n}"
 else
-  echo "✔ Passed:"
+  echo "✅ Passed:"
   echo "  • (none)"
 fi
 
 if [ -n "$FAILED_DIRS" ]; then
-  echo "✘ Failed:"
+  echo "❌ Failed:"
   echo -e "${FAILED_DIRS#\\n}"
 else
-  echo "✘ Failed:"
+  echo "❌ Failed:"
   echo "  • (none)"
 fi
 
