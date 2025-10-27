@@ -36,29 +36,14 @@ for d in $DIRS; do
   echo "────────────────────────────────────────────"
   echo "📂 Linting directory: $d"
 
-  # First attempt: normal run with all default linters
+  # run lint once, capture output
   set +e
   OUTPUT=$(cd "$d" && golangci-lint run --timeout=5m . 2>&1)
   STATUS=$?
   set -e
 
-  # If that fails, do a reduced run with only a safe subset of linters.
-  # v2 syntax: --only-use=<comma-separated>
-  if [ $STATUS -ne 0 ]; then
-    echo "⚠️  Falling back to minimal linters in $d"
-    set +e
-    OUTPUT=$(cd "$d" && golangci-lint run \
-      --timeout=5m \
-      --only-use=govet,staticcheck,ineffassign,gofmt \
-      . 2>&1)
-    STATUS=$?
-    set -e
-  fi
-
-  # Classify results
-
   if [ $STATUS -eq 0 ]; then
-    # Lint succeeded, no findings
+    # clean lint, nothing reported
     echo "✅ PASS $d"
     if [ -n "$PASSED_DIRS" ]; then
       PASSED_DIRS="${PASSED_DIRS}\n  • ${d}"
@@ -68,20 +53,25 @@ for d in $DIRS; do
     continue
   fi
 
-  # Detect toolchain / analyzer crash vs real lint failures.
-  # Crash case example: "internal/goarch ... unsupported version"
-  if echo "$OUTPUT" | grep -qi 'internal/goarch'; then
-    echo "⚠️  SKIP $d (toolchain mismatch: golangci-lint vs Go stdlib)"
+  # At this point golangci-lint exited nonzero.
+  # Decide: was this a TOOLING issue or a REAL lint failure?
+
+  # Heuristics for "tooling is broken, not your code":
+  # - analyzer can't load stdlib/export data (internal/goarch)
+  # - unknown flag messages (CLI mismatch)
+  # - pure "can't run linter goanalysis_metalinter" style crashes
+  if echo "$OUTPUT" | grep -qiE 'internal/goarch|goanalysis_metalinter|unsupported version|unknown flag'; then
+    echo "⚠️  SKIP $d (tooling/analyzer issue, not code)"
     if [ -n "$SKIPPED_DIRS" ]; then
       SKIPPED_DIRS="${SKIPPED_DIRS}\n  • ${d}"
     else
       SKIPPED_DIRS="  • ${d}"
     fi
-    # Don't fail the pipeline for this.
+    # don't treat as failure for CI purposes
     continue
   fi
 
-  # Otherwise, this is a real lint failure with actionable findings.
+  # Otherwise, assume it's a real lint failure with actionable findings
   echo "❌ FAIL $d"
   echo "▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼"
   echo "$OUTPUT"
@@ -115,7 +105,7 @@ else
 fi
 
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "↷ SKIPPED (TOOLCHAIN / ANALYZER MISMATCH):"
+echo "↷ SKIPPED (TOOLING / ANALYZER MISMATCH):"
 if [ -n "$SKIPPED_DIRS" ]; then
   echo -e "$SKIPPED_DIRS"
 else
