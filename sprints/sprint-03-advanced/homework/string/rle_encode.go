@@ -1,0 +1,85 @@
+package problems
+
+import (
+	"strconv"
+	"strings"
+)
+
+// RLEncode выполняет кодирование строки методом Run-Length Encoding (RLE).
+//
+// Задача:
+//
+//	Сжать строку, заменяя последовательности одинаковых символов на
+//	символ и количество его повторений. Если символ встречается только один раз,
+//	записывать только символ без числа.
+//
+// Сигнатура функции:
+//
+//	func RLEncode(s string) string
+//
+// Вход:
+//   - s string: исходная строка для кодирования
+//
+// Выход:
+//   - string: закодированная строка в формате RLE
+//
+// Примеры:
+//
+//	RLEncode("aabcccccaaa") → "a2bc5a3"
+//	RLEncode("abcdef") → "abcdef" (нет повторений)
+//	RLEncode("aabbcc") → "a2b2c2"
+//	RLEncode("") → "" (пустая строка)
+//	RLEncode("a") → "a" (один символ)
+//	RLEncode("aaaa") → "a4"
+//	RLEncode("aabaa") → "a2ba2"
+//
+// Ограничения:
+//   - Строка состоит из печатных ASCII символов
+//   - Длина строки может быть от 0 до 10^4
+//   - Временная сложность: O(n), где n - длина исходной строки
+//   - Пространственная сложность: O(n) для результирующей строки
+//
+// Особенности:
+//   - Отслеживайте текущий символ и его количество
+//   - При смене символа или достижении конца строки записывайте результат
+//   - Если количество равно 1, записывайте только символ
+//   - Если количество больше 1, записывайте символ + число
+//   - Обработайте пустую строку
+//
+// Идиоматичный Go:
+//   - Используйте strings.Builder для эффективного построения строки
+//   - Используйте strconv.Itoa для преобразования числа в строку
+//   - Итерируйтесь по rune для корректной работы с Unicode
+func RLEncode(s string) string {
+	if len(s) == 0 {
+		return ""
+	}
+
+	var builder strings.Builder
+	count := 1
+	current := s[0]
+
+	for i := 1; i < len(s); i++ {
+		if s[i] == current {
+			count++
+			continue
+		}
+
+		builder.WriteByte(current)
+
+		if count > 1 {
+			builder.WriteString(strconv.Itoa(count))
+		}
+
+		current = s[i]
+		count = 1
+	}
+
+	builder.WriteByte(current)
+
+	if count > 1 {
+		builder.WriteString(strconv.Itoa(count))
+	}
+
+	return builder.String()
+}
