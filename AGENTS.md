@@ -17,7 +17,7 @@ This file provides guidance to agents when working with code in this repository.
 ## Directory Structure
 - Sprint-based organization: `sprints/sprint-XX-name/category/exercise.go`
 - Each sprint has single test file importing from all subdirectories
-- Import paths use full module: `example.com/practice-tasks/sprints/sprint-XX-name/subdir`
+- Import paths use full module: `github.com/Maltide/Practice-Tasks/sprints/sprint-XX-name/subdir`
 
 ## Code Style
 - Table-driven tests with comprehensive edge cases (empty inputs, negatives, single items)

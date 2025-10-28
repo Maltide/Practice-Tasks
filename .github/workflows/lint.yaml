@@ -1,0 +1,24 @@
+name: Homework Lint
+
+on:
+  pull_request:
+    branches: [ main, sprint-* ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25'
+
+      - name: Make lint script executable
+        run: chmod +x .github/scripts/run_homework_lint.sh
+
+      - name: Run homework linter
+        run: .github/scripts/run_homework_lint.sh
