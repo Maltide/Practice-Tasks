@@ -3,6 +3,7 @@ package homework
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net/http"
 	"sync"
 	"time"
@@ -64,7 +65,12 @@ func FetchURLs(urls []string, timeout time.Duration) (map[string]int, error) {
 				ch <- result{url: url, status: 0, err: err}
 				return
 			}
-			defer resp.Body.Close()
+			defer func() {
+				if cerr := resp.Body.Close(); cerr != nil && err == nil {
+					// если до этого не было ошибки — вернём ошибку закрытия
+					err = fmt.Errorf("close body: %w", cerr)
+				}
+			}()
 			statusCode := resp.StatusCode
 			res := result{
 				url:    url,

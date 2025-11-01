@@ -45,15 +45,16 @@ func FanOutFanIn(numbers []int, numWorkers int) []int {
 			// Process the number (multiply by 3) and send to output channel
 			outputch <- numbers[i] * 3
 			// Immediately read back the result from the same channel
-			resultint := <-outputch
 			// Append to shared result slice (potential race condition)
-			resultslice = append(resultslice, resultint)
 			<-tokench // Release semaphore slot
 		}(i)
 	}
 	wg.Wait()
 	close(outputch)
 	close(tokench)
+	for val := range outputch {
+		resultslice = append(resultslice, val)
+	}
 
 	return resultslice
 }

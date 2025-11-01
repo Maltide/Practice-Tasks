@@ -1,3 +1,4 @@
+// Package homework содержит примеры для тренировки конкурентности и проверки ошибок.
 package homework
 
 import (
@@ -6,6 +7,7 @@ import (
 	"time"
 )
 
+// PrintNumbers запускает несколько goroutine и печатает числа с синхронизацией через WaitGroup.
 func PrintNumbers() {
 	var wg sync.WaitGroup
 
@@ -20,6 +22,7 @@ func PrintNumbers() {
 	fmt.Println("Done")
 }
 
+// PrintSquares печатает квадраты чисел из среза numbers (название переменной примерное — можно иное).
 func PrintSquares(numbers []int) {
 	var wg sync.WaitGroup
 
@@ -34,6 +37,7 @@ func PrintSquares(numbers []int) {
 	wg.Wait()
 }
 
+// SumChannel суммирует значения, полученные из канала, и возвращает сумму.
 func SumChannel(numbers []int) int {
 	ch := make(chan int)
 
@@ -51,6 +55,7 @@ func SumChannel(numbers []int) int {
 	return sum
 }
 
+// ConcurrentCounter увеличивает счётчик конкурентно n раз и возвращает итоговое значение.
 func ConcurrentCounter(n int) int {
 	counter := 0
 	var wg sync.WaitGroup
@@ -67,6 +72,7 @@ func ConcurrentCounter(n int) int {
 	return counter
 }
 
+// ProcessData обрабатывает входные данные и возвращает результат обработки.
 func ProcessData(data []int) []int {
 	results := make(chan int)
 
@@ -85,6 +91,7 @@ func ProcessData(data []int) []int {
 	return output
 }
 
+// MonitorChannel наблюдает за каналом input в течение указанной длительности и возвращает метрики.
 func MonitorChannel(input <-chan int, duration time.Duration) []int {
 	results := []int{}
 	timeout := time.After(duration)
@@ -99,6 +106,7 @@ func MonitorChannel(input <-chan int, duration time.Duration) []int {
 	}
 }
 
+// DeadlockExample демонстрирует ситуацию взаимной блокировки для учебных целей.
 func DeadlockExample() {
 	ch1 := make(chan int)
 	ch2 := make(chan int)
