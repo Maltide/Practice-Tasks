@@ -53,7 +53,6 @@ func ParallelSum(numbers []int, workers int) int {
 			end := min(start+size, len(numbers))
 			sum := 0
 			for _, val := range numbers[start:end] {
-
 				sum += val
 			}
 			ch <- sum
@@ -66,7 +65,6 @@ func ParallelSum(numbers []int, workers int) int {
 		result += val
 	}
 	return result
-
 }
 
 // SquareSum calculates sum of squares in parallel
@@ -93,7 +91,6 @@ func SquareSum(numbers []int, workers int) int {
 			end := min(start+size, len(numbers))
 			sum := 0
 			for _, val := range numbers[start:end] {
-
 				sum += val * val
 			}
 			ch <- sum

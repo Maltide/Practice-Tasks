@@ -138,7 +138,9 @@ func BenchmarkFetchURLs(b *testing.B) {
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		FetchURLs(urls, 5*time.Second)
+		if _, cerr := FetchURLs(urls, 5*time.Second); cerr != nil {
+			b.Fatal("FetchUrls failed: ", cerr)
+		}
 	}
 }
 
@@ -223,8 +225,6 @@ func BenchmarkProcessPipeline(b *testing.B) {
 		// Add timeout protection for benchmark
 		done := make(chan bool)
 		go func() {
-			for range ch {
-			}
 			done <- true
 		}()
 
@@ -282,10 +282,10 @@ func TestWorkerPool(t *testing.T) {
 }
 
 // Helper function to generate doubled range
-func makeDoubledRange(min, max int) []int {
-	result := make([]int, max-min+1)
+func makeDoubledRange(lo, hi int) []int {
+	result := make([]int, hi-lo+1)
 	for i := range result {
-		result[i] = 2 * (min + i)
+		result[i] = 2 * (lo + i)
 	}
 	return result
 }
@@ -643,10 +643,10 @@ func TestFanOutFanIn(t *testing.T) {
 }
 
 // Helper function to generate tripled range
-func makeTripledRange(min, max int) []int {
-	result := make([]int, max-min+1)
+func makeTripledRange(lo, hi int) []int {
+	result := make([]int, hi-lo+1)
 	for i := range result {
-		result[i] = 3 * (min + i)
+		result[i] = 3 * (lo + i)
 	}
 	return result
 }
@@ -817,13 +817,13 @@ func BenchmarkConcurrentDownloader(b *testing.B) {
 func TestNewMockHTTPClient(t *testing.T) {
 	client := NewMockHTTPClient()
 	if client == nil {
-		t.Error("NewMockHTTPClient() returned nil")
+		t.Fatal("NewMockHTTPClient() returned nil")
 	}
 	if client.responses == nil {
-		t.Error("NewMockHTTPClient() responses map is nil")
+		t.Fatal("NewMockHTTPClient() responses map is nil")
 	}
 	if client.delays == nil {
-		t.Error("NewMockHTTPClient() delays map is nil")
+		t.Fatal("NewMockHTTPClient() delays map is nil")
 	}
 }
 
@@ -874,10 +874,10 @@ func TestFetchWithRetry(t *testing.T) {
 }
 
 // Helper functions
-func makeRange(min, max int) []int {
-	result := make([]int, max-min+1)
+func makeRange(lo, hi int) []int {
+	result := make([]int, hi-lo+1)
 	for i := range result {
-		result[i] = min + i
+		result[i] = lo + i
 	}
 	return result
 }

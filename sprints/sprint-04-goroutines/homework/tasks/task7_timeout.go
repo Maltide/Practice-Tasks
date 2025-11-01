@@ -40,9 +40,9 @@ import (
 // timeout logic itself.
 //
 // PACKAGES TO USE:
-// - time.After: https://pkg.go.dev/time#After
-//   timeout := time.After(5 * time.Second)
-//   select { case <-timeout: /* handle timeout */ }
+//   - time.After: https://pkg.go.dev/time#After
+//     timeout := time.After(5 * time.Second)
+//     select { case <-timeout: /* handle timeout */ }
 //
 // HINT: Use select with time.After and done channel
 //
@@ -53,17 +53,19 @@ import (
 // - No goroutines are leaked. The processing goroutine should naturally finish or be designed to not block indefinitely.
 //
 // Example Test Case (from tasks_test.go):
-// t.Run("times out", func(t *testing.T) {
-//     data := makeRange(1, 100) // Creates a slice [1, 2, ..., 100]
-//     _, err := ProcessWithTimeout(data, 1*time.Millisecond)
-//     // This test expects err to be non-nil (specifically ErrTimeout)
-//     // because processing 100 items should take longer than 1ms,
-//     // thus triggering the timeout path in the select statement.
-//     if err == nil {
-//         t.Error("ProcessWithTimeout() expected timeout error")
-//     }
-// })
+//
+//	t.Run("times out", func(t *testing.T) {
+//	    data := makeRange(1, 100) // Creates a slice [1, 2, ..., 100]
+//	    _, err := ProcessWithTimeout(data, 1*time.Millisecond)
+//	    // This test expects err to be non-nil (specifically ErrTimeout)
+//	    // because processing 100 items should take longer than 1ms,
+//	    // thus triggering the timeout path in the select statement.
+//	    if err == nil {
+//	        t.Error("ProcessWithTimeout() expected timeout error")
+//	    }
+//	})
 
+// ErrTimeout neede for different error that says that timeout wins the race
 var ErrTimeout = errors.New("processing timeout exceeded")
 
 // ProcessWithTimeout processes data with a timeout
@@ -119,5 +121,4 @@ func ProcessWithTimeout(data []int, timeout time.Duration) (int, error) {
 	// 4. If done channel receives first, return count
 	// 5. If timeout channel receives first, return error
 	// 6. Return processed count or timeout error
-
 }

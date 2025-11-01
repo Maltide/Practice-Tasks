@@ -49,9 +49,8 @@ func RateLimitedProcessor(items []string, maxPerSecond int) <-chan string {
 	// fmt.Printf("ticker = %v\n", ticker)
 
 	go func() {
-
 		fmt.Println("Starting for loop")
-		for i := 0; i < len(items); i++ {
+		for i := range items {
 			// fmt.Println("Trying to read signal from ticker.C")
 			<-ticker.C
 			// fmt.Println("Signal was found")

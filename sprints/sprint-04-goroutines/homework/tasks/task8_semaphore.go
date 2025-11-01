@@ -29,18 +29,17 @@ func ConcurrentDownloader(urls []string, maxConcurrent int) int {
 	//    a. Send to semaphore channel to acquire slot
 	count := 0
 	//    b. Launch goroutine
-	for i := 0; i < len(urls); i++ {
+	for range urls {
 		wg.Add(1)
-		go func(i int) {
+		go func() {
 			defer wg.Done()
 			bufferedch <- struct{}{}
 			count++
 			<-bufferedch
-		}(i)
+		}()
 	}
-
 	wg.Wait()
-
+	close(bufferedch)
 	//    c. In goroutine, defer receive from semaphore to release slot
 	//    d. Simulate download and increment success counter
 	// 4. Wait for all goroutines to complete

@@ -3,6 +3,7 @@ package homework
 import (
 	"bytes"
 	"io"
+	"log"
 	"os"
 	"strings"
 	"testing"
@@ -20,11 +21,16 @@ func captureOutput(f func()) string {
 
 	f()
 
-	w.Close()
+	if cerr := w.Close(); cerr != nil {
+		log.Printf("captureOutput: close writer: %v", cerr)
+	}
+
 	os.Stdout = old
 
 	var buf bytes.Buffer
-	io.Copy(&buf, r)
+	if _, cerr := io.Copy(&buf, r); cerr != nil {
+		log.Printf("captureOutput: copy: %v", cerr)
+	}
 	return buf.String()
 }
 
@@ -302,7 +308,7 @@ func TestMonitorChannel(t *testing.T) {
 }
 
 func TestDeadlockExample(t *testing.T) {
-	t.Run("completes without hanging", func(t *testing.T) {
+	t.Run("completes without hanging", func(_ *testing.T) {
 		start := time.Now()
 		DeadlockExample()
 		duration := time.Since(start)
@@ -313,7 +319,7 @@ func TestDeadlockExample(t *testing.T) {
 		}
 	})
 
-	t.Run("demonstrates deadlock scenario", func(t *testing.T) {
+	t.Run("demonstrates deadlock scenario", func(_ *testing.T) {
 		// Test that the function completes and doesn't actually deadlock
 		DeadlockExample()
 		// If we reach here, the function completed successfully
