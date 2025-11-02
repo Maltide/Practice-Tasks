@@ -8,6 +8,9 @@ func IsValidParentheses(s string) bool {
 	if len(s) == 0 {
 		return false
 	}
+	if s[0] == ')' || s[0] == '}' || s[0] == ']' {
+		return false
+	}
 	stack := []rune{}
 	for _, val := range s {
 		switch val {
@@ -37,5 +40,5 @@ func IsValidParentheses(s string) bool {
 			}
 		}
 	}
-	return true
+	return len(stack) == 0
 }

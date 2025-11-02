@@ -8,7 +8,7 @@ type Queue struct {
 // NewQueue creates a new empty queue
 func NewQueue() *Queue {
 	// TODO: implement
-	return nil
+	return &Queue{items: []int{}}
 }
 
 // Push adds an element to the back of the queue
@@ -27,17 +27,28 @@ func (q *Queue) Pull() (int, bool) {
 // Returns the front element and a boolean indicating success
 func (q *Queue) Front() (int, bool) {
 	// TODO: implement
-	return 0, false
+	if q.IsEmpty() {
+		return 0, false
+	}
+	top := q.items[0]
+	return top, true
 }
 
 // IsEmpty checks if the queue is empty
 func (q *Queue) IsEmpty() bool {
 	// TODO: implement
+	if len(q.items) == 0 {
+		return true
+	}
 	return false
 }
 
 // Size returns the number of items in the queue
 func (q *Queue) Size() int {
 	// TODO: implement
-	return 0
+	count := 0
+	for range q.items {
+		count++
+	}
+	return count
 }
