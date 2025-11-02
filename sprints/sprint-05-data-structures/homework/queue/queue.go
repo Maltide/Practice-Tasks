@@ -10,7 +10,7 @@ type Queue struct {
 // NewQueue creates a new empty queue
 func NewQueue() *Queue {
 	// TODO: implement
-	return &Queue{items: []int{}}
+	return &Queue{}
 }
 
 // Push adds an element to the back of the queue
