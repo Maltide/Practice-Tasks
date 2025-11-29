@@ -10,7 +10,7 @@
 |--------|-------|--------|----------|
 | [Sprint 01: Основы](sprints/sprint-01-basics/) | 4 | 4 | ✅ 100% |
 | [Sprint 02: Алгоритмы](sprints/sprint-02-algorithms/) | 7 | 7 | ✅ 100% |
-| [Sprint 03: Продвинутые](sprints/sprint-03-advanced/) | 11 | 0 | ⏳ 0% |
+| [Sprint 03: Продвинутые](sprints/sprint-03-advanced/) | 11 | 11 | ⏳ 0% |
 
 ## 🎯 Быстрый старт
 1. Начните с [Sprint 01](sprints/sprint-01-basics/)
