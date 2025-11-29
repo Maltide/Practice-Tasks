@@ -3,6 +3,7 @@ name: Homework test
 on:
   pull_request:
     branches: [ main, sprint-* ]
+  workflow_dispatch:
 
 jobs:
   test:
