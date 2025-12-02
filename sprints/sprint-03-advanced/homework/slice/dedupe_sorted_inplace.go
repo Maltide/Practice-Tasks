@@ -1,3 +1,4 @@
+// Package problems give opportunity to learn how go works around different structures
 package problems
 
 // DedupeSortedInPlace удаляет дубликаты из отсортированного слайса "на месте".
@@ -48,7 +49,6 @@ package problems
 //   - Изменяйте исходный слайс напрямую
 //   - Возвращайте новую длину как int
 func DedupeSortedInPlace(nums []int) int { //а точно ли write, read можно назвать указателями ? слайс меняется не через прямое обращение к указателям (*read or *write), а слайс меняется обращаясь к ним.
-
 	if len(nums) <= 1 {
 		return len(nums)
 	}

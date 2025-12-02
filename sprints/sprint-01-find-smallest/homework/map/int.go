@@ -1,7 +1,9 @@
+// Package problems give opportunity to learn how go works around different structures
 package problems
 
 import "math"
 
+// FindSmallestIntInMap returns minimum value in map of integers
 func FindSmallestIntInMap(m map[int]int) int {
 	// Эта функция находит наименьшее значение в мапе целых чисел.
 	//
@@ -22,11 +24,14 @@ func FindSmallestIntInMap(m map[int]int) int {
 	if len(m) == 0 {
 		return 0
 	}
-	var minval int = math.MaxInt
+
+	minval := math.MaxInt
+
 	for _, val := range m {
 		if val < minval {
 			minval = val
 		}
 	}
+
 	return minval
 }

@@ -46,7 +46,6 @@ import "strings"
 //   - Используйте range для итерации по символам
 //   - Работайте с rune для корректной обработки Unicode
 //   - Возвращайте подстроку исходной строки
-
 func LongestCommonPrefix(words []string) string {
 	if len(words) == 0 {
 		return ""

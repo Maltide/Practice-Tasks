@@ -1,3 +1,4 @@
+// Package problems give opportunity to learn how go works around different structures
 package problems
 
 // CountFrequencies строит частоты появления строк в слайсе.
@@ -11,7 +12,6 @@ package problems
 // Пример:
 //   - items = []string{"a", "b", "a"} -> map[string]int{"a": 2, "b": 1}
 func CountFrequencies(items []string) map[string]int {
-
 	counter := make(map[string]int)
 
 	for _, val := range items {

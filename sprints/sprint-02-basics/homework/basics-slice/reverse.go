@@ -1,3 +1,4 @@
+// Package problems give opportunity to learn how go works around different structures
 package problems
 
 // ReverseSlice разворачивает слайс целых чисел "на месте".

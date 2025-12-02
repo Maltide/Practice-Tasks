@@ -1,3 +1,4 @@
+// Package problems give opportunity to learn how go works around different structures
 package problems
 
 // UniqueValues возвращает новый слайс с уникальными значениями исходного слайса.

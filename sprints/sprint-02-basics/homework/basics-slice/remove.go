@@ -1,3 +1,4 @@
+// Package problems give opportunity to learn how go works around different structures
 package problems
 
 // RemoveAtIndex удаляет элемент по индексу, сохраняя порядок остальных значений.

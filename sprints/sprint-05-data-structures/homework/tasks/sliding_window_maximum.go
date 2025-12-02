@@ -6,5 +6,12 @@ package problems
 // Return the max sliding window
 func MaxSlidingWindow(nums []int, k int) []int {
 	// TODO: implement
+	if len(nums) == 0 {
+		return []int{}
+	}
+	if len(nums) == 1 {
+		return nums
+	}
+
 	return nil
 }

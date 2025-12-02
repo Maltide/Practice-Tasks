@@ -1,3 +1,4 @@
+// Package problems give opportunity to learn how go works around different structures
 package problems
 
 // Fibonacci генерирует первые n чисел последовательности Фибоначчи начиная с 0 и 1.

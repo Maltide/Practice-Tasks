@@ -1,7 +1,9 @@
+// Package problems give opportunity to learn how go works around different structures
 package problems
 
 import "time"
 
+// FindSmallestTime returns minimum value in slice of time-structure
 func FindSmallestTime(slice []time.Time) time.Time {
 	// Эта функция находит самое раннее время в слайсе временных меток.
 	//
@@ -21,6 +23,7 @@ func FindSmallestTime(slice []time.Time) time.Time {
 	if len(slice) == 0 {
 		return time.Time{}
 	}
+
 	minTime := slice[0]
 
 	for i := range slice[1:] {

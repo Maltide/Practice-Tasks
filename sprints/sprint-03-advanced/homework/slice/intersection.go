@@ -62,7 +62,6 @@ func IntersectionUnique(a, b []int) []int {
 				duplicate[val] = true
 			}
 		}
-
 	} else {
 		for _, val := range a {
 			biggestslice[val] = true
@@ -77,9 +76,10 @@ func IntersectionUnique(a, b []int) []int {
 			}
 		}
 	}
+
 	if len(resultslice) == 0 {
 		return nil
-	} else {
-		return resultslice
 	}
+
+	return resultslice
 }

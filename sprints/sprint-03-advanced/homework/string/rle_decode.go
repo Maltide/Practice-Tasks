@@ -100,7 +100,6 @@ func RLDecode(s string) (string, error) {
 		}
 		current = rune(s[i])
 		count = ""
-
 	}
 
 	if len(count) == 0 {
@@ -114,7 +113,6 @@ func RLDecode(s string) (string, error) {
 		for range number {
 			builder.WriteRune(current)
 		}
-
 	}
 
 	return builder.String(), nil

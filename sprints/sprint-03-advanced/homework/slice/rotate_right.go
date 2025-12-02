@@ -43,7 +43,6 @@ package problems
 //   - Создайте новый слайс, не изменяя исходный
 //   - Обработайте граничные случаи в начале функции
 func RotateRight(nums []int, k int) []int {
-
 	if len(nums) == 0 {
 		return []int{}
 	}

@@ -1,5 +1,7 @@
+// Package problems give opportunity to learn how go works around different structures
 package problems
 
+// FindSmallestInt returns minimum value in slice of int
 func FindSmallestInt(slice []int) int {
 	// Эта функция находит наименьшее число в слайсе целых чисел.
 	//
@@ -24,12 +26,12 @@ func FindSmallestInt(slice []int) int {
 	if len(slice) == 0 {
 		return 0
 	}
+
 	var smallest int
 
 	smallest = slice[0]
 
 	for i := range slice {
-
 		if slice[i] < smallest {
 			smallest = slice[i]
 		}

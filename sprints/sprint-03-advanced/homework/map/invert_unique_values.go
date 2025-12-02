@@ -1,3 +1,4 @@
+// Package problems give opportunity to learn how go works around different structures
 package problems
 
 // InvertUnique инвертирует map, меняя местами ключи и значения.
@@ -44,15 +45,14 @@ package problems
 //   - Итерируйтесь по исходному map с помощью range
 //   - Возвращайте пустой map для пустого входа
 func InvertUnique(m map[string]int) map[int]string {
-
 	if len(m) == 0 {
 		return make(map[int]string)
 	}
 
-	new_m := make(map[int]string)
+	newM := make(map[int]string)
 
 	for i, val := range m {
-		new_m[val] = i
+		newM[val] = i
 	}
-	return new_m
+	return newM
 }

@@ -1,3 +1,4 @@
+// Package problems give opportunity to learn how go works around different structures
 package problems
 
 import "math"
@@ -14,8 +15,9 @@ import "math"
 //   - nums = []int{5, 1, 5, 2} -> 2
 //   - nums = []int{1, 2, 3}     -> 2
 func SecondLargest(nums []int) int {
-	var firstmax int = nums[0]
-	var secondlargest int = math.MinInt
+	firstmax := nums[0]
+
+	secondlargest := math.MinInt
 
 	for i := 1; i < len(nums); i++ {
 		if nums[i] > firstmax {

@@ -62,7 +62,6 @@ func MaxSumFixedK(nums []int, k int) (int, bool) {
 	best := summary
 
 	for i := k; i < len(nums); i++ {
-
 		summary = summary + nums[i] - nums[i-k]
 
 		if summary > best {

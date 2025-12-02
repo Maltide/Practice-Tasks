@@ -1,3 +1,4 @@
+// Package problems give opportunity to learn how go works around different structures
 package problems
 
 // TwoSum находит индексы двух чисел в массиве, сумма которых равна целевому значению.
@@ -47,7 +48,6 @@ package problems
 //   - Используйте map[int]int для хранения значение -> индекс
 //   - Проверяйте существование ключа с помощью value, ok := map[key]
 //   - Возвращайте (-1, -1) если решения нет
-
 func TwoSum(nums []int, target int) (int, int) {
 	if len(nums) == 0 {
 		return -1, -1
@@ -59,9 +59,8 @@ func TwoSum(nums []int, target int) (int, int) {
 		complement := target - val
 		if idx, ok := m[complement]; ok {
 			return idx, i
-		} else {
-			m[val] = i
 		}
+		m[val] = i
 	}
 
 	return -1, -1

@@ -1,3 +1,4 @@
+// Package problems give opportunity to learn how go works around different structures
 package problems
 
 // IsBracketSequenceBalanced проверяет корректность расстановки скобок в строке.
@@ -13,7 +14,6 @@ package problems
 //   - s = "([]){}" -> true
 //   - s = "([)]"   -> false
 func IsBracketSequenceBalanced(s string) bool {
-
 	stack := []byte{}
 
 	pairs := map[byte]byte{
@@ -40,9 +40,5 @@ func IsBracketSequenceBalanced(s string) bool {
 		}
 	}
 
-	if len(stack) > 0 {
-		return false
-	}
-
-	return true
+	return len(stack) == 0
 }
