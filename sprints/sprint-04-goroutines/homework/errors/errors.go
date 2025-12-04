@@ -130,13 +130,13 @@ func DeadlockExample() {
 	ch2 := make(chan int)
 
 	go func() {
-		<-ch1
-		ch2 <- 1
+		<-ch2
+		ch1 <- 1
 	}()
 
 	go func() {
-		<-ch2
-		ch1 <- 2
+		<-ch1
+		ch2 <- 2
 	}()
 
 	time.Sleep(100 * time.Millisecond)
