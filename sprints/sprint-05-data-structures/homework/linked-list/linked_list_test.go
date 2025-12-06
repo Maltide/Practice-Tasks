@@ -51,7 +51,7 @@ func TestLinkedList(t *testing.T) {
 			operations: []string{"addathead", "addattail", "addatindex", "get", "deleteatindex", "get"},
 			values:     []int{1, 3, 1, 2, 0, 1, 0},
 			indices:    []int{0, 0, 1, 1, 1, 1},
-			expected:   []interface{}{nil, nil, nil, 2, true, 3},
+			expected:   []interface{}{nil, nil, nil, 1, true, 3},
 		},
 		{
 			name:       "empty list operations",
