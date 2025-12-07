@@ -9,9 +9,22 @@ func MaxSlidingWindow(nums []int, k int) []int {
 	if len(nums) == 0 {
 		return []int{}
 	}
+
 	if len(nums) == 1 {
 		return nums
 	}
 
-	return nil
+	maxval := make([]int, 0, (len(nums) - k + 1))
+
+	for i := 0; i < len(nums)-k+1; i++ {
+		curMax := nums[i]
+		for j := 1; j < i+k; j++ {
+			if nums[j] > curMax {
+				curMax = nums[j]
+			}
+		}
+		maxval = append(maxval, curMax)
+	}
+
+	return maxval
 }
