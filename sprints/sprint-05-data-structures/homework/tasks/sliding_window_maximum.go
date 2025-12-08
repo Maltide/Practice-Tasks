@@ -14,11 +14,11 @@ func MaxSlidingWindow(nums []int, k int) []int {
 		return nums
 	}
 
-	maxval := make([]int, 0, (len(nums) - k + 1))
+	maxval := make([]int, 0, len(nums)-k+1)
 
 	for i := 0; i < len(nums)-k+1; i++ {
 		curMax := nums[i]
-		for j := 1; j < i+k; j++ {
+		for j := i; j < i+k; j++ {
 			if nums[j] > curMax {
 				curMax = nums[j]
 			}
