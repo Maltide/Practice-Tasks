@@ -37,5 +37,20 @@ package problems
 //   - Performs minimum number of swaps (at most n-1)
 //   - Not adaptive - always performs same number of comparisons
 func SelectionSort(arr []int) []int {
-	panic("implement me")
+	if len(arr) == 0 || len(arr) == 1 {
+		return arr
+	}
+
+	for i := 0; i < len(arr)-1; i++ {
+		minIndex := i
+		for j := i + 1; j < len(arr); j++ {
+			if arr[j] < arr[minIndex] {
+				minIndex = j
+			}
+		}
+		if minIndex != i {
+			arr[i], arr[minIndex] = arr[minIndex], arr[i]
+		}
+	}
+	return arr
 }

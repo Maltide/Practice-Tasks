@@ -33,5 +33,16 @@ package problems
 //   - Adaptive - can be optimized to stop early if array is already sorted
 //   - Simple to implement but inefficient for large datasets
 func BubbleSort(arr []int) []int {
-	panic("implement me")
+	if len(arr) == 0 || len(arr) == 1 {
+		return arr
+	}
+
+	for i := 0; i < len(arr)-1; i++ {
+		for j := 0; j < len(arr)-i-1; j++ {
+			if arr[j] > arr[j+1] {
+				arr[j], arr[j+1] = arr[j+1], arr[j]
+			}
+		}
+	}
+	return arr
 }

@@ -41,5 +41,18 @@ package problems
 //   - Efficient for small data sets
 //   - In-place - requires minimal additional memory
 func InsertionSort(arr []int) []int {
-	panic("implement me")
+	if len(arr) == 0 || len(arr) == 1 {
+		return arr
+	}
+
+	for i := 1; i < len(arr); i++ {
+		for j := i; j > 0; j-- {
+			if arr[j-1] > arr[j] {
+				arr[j], arr[j-1] = arr[j-1], arr[j]
+			} else {
+				break
+			}
+		}
+	}
+	return arr
 }
