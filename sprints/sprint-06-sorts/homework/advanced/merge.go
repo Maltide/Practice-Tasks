@@ -35,15 +35,47 @@ package problems
 //   - Works well with large datasets
 //   - Works well with slow storage (disks, tapes) due to sequential access
 func MergeSort(arr []int) []int {
-	panic("implement me")
+	if len(arr) <= 1 {
+		return arr
+	}
+	mid := len(arr) / 2
+	left := arr[0:mid]
+	right := arr[mid:]
+	left = MergeSort(left)
+	right = MergeSort(right)
+	return merge(left, right)
 }
 
 // mergeSortHelper вспомогательная рекурсивная функция для сортировки слиянием
-func mergeSortHelper(arr []int) []int {
-	panic("implement me")
-}
+// func mergeSortHelper(arr []int) []int {
+// 	panic("implement me")
+// }
 
 // merge объединяет два отсортированных слайса в один отсортированный слайс
 func merge(left, right []int) []int {
-	panic("implement me")
+	result := []int{}
+
+	i, j := 0, 0
+
+	for i < len(left) && j < len(right) {
+		if left[i] <= right[j] {
+			result = append(result, left[i])
+			i++
+		} else {
+			result = append(result, right[j])
+			j++
+		}
+	}
+
+	for i < len(left) {
+		result = append(result, left[i])
+		i++
+	}
+
+	for j < len(right) {
+		result = append(result, right[j])
+		j++
+	}
+
+	return result
 }
