@@ -37,11 +37,43 @@ package problems
 //   - Not adaptive - always performs same number of operations
 //   - Guaranteed O(n log n) time complexity
 func HeapSort(arr []int) []int {
-	panic("implement me")
+	if len(arr) <= 1 {
+		return arr
+	}
+
+	n := len(arr)
+
+	for i := n/2 - 1; i >= 0; i-- {
+		heapify(arr, n, i)
+	}
+
+	for i := n - 1; i > 0; i-- {
+		arr[0], arr[i] = arr[i], arr[0]
+		heapify(arr, i, 0)
+	}
+
+	return arr
 }
 
 // heapify функция для преобразования поддерева с корнем в индексе i в max-heap
 // n - размер кучи
 func heapify(arr []int, n, i int) {
-	panic("implement me")
+	left := 2*i + 1
+
+	right := 2*i + 2
+
+	largest := i
+
+	if left < n && arr[left] > arr[largest] {
+		largest = left
+	}
+
+	if right < n && arr[right] > arr[largest] {
+		largest = right
+	}
+
+	if largest != i {
+		arr[largest], arr[i] = arr[i], arr[largest]
+		heapify(arr, n, largest)
+	}
 }
