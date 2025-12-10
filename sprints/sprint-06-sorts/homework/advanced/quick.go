@@ -38,16 +38,45 @@ package problems
 //   - Typically faster than merge sort in practice
 //   - Worst case can be avoided by randomly selecting pivot
 func QuickSort(arr []int) []int {
-	panic("implement me")
+	if len(arr) <= 1 {
+		return arr
+	}
+
+	pivotIndex := partition(arr, 0, len(arr)-1)
+
+	quickSortHelper(arr, 0, pivotIndex-1)
+
+	quickSortHelper(arr, pivotIndex+1, len(arr)-1)
+
+	return arr
 }
 
 // quickSortHelper вспомогательная рекурсивная функция для быстрой сортировки
 func quickSortHelper(arr []int, low, high int) {
-	panic("implement me")
+	if low >= high {
+		return
+	}
+
+	pivotIndex := partition(arr, low, high)
+
+	quickSortHelper(arr, low, pivotIndex-1)
+
+	quickSortHelper(arr, pivotIndex+1, high)
 }
 
 // partition функция разделения массива вокруг опорного элемента
 // Возвращает индекс опорного элемента после разделения
 func partition(arr []int, low, high int) int {
-	panic("implement me")
+	i := low - 1
+
+	for j := low; j < high; j++ {
+		if arr[j] < arr[high] {
+			i++
+			arr[i], arr[j] = arr[j], arr[i]
+		}
+	}
+
+	arr[i+1], arr[high] = arr[high], arr[i+1]
+
+	return i + 1
 }
