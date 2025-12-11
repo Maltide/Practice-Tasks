@@ -38,11 +38,70 @@ package problems
 //   - Works only with integers
 //   - Can be adapted to work with negative numbers
 func CountingSort(arr []int) []int {
-	panic("implement me")
+	if len(arr) <= 1 {
+		return arr
+	}
+
+	minInt := arr[0]
+
+	maxint := arr[0]
+
+	for _, val := range arr {
+		if val < minInt {
+			minInt = val
+		}
+
+		if val > maxint {
+			maxint = val
+		}
+	}
+
+	counterslice := make([]int, maxint-minInt+1, maxint-minInt+1)
+
+	for i := range arr {
+		counterslice[arr[i]-minInt]++
+	}
+
+	resultslice := make([]int, 0, len(arr))
+
+	for i := range counterslice {
+		for counterslice[i] > 0 {
+			resultslice = append(resultslice, i+minInt)
+			counterslice[i]--
+		}
+	}
+	return resultslice
 }
 
 // CountingSortPositive сортирует слайс неотрицательных целых чисел по возрастанию
 // Это упрощенная версия сортировки подсчетом для положительных чисел
 func CountingSortPositive(arr []int) []int {
-	panic("implement me")
+	if len(arr) <= 1 {
+		return arr
+	}
+
+	maxint := arr[0]
+
+	for i := range arr {
+		if arr[i] > maxint {
+			maxint = arr[i]
+		}
+	}
+
+	counterslice := make([]int, maxint+1, maxint+1)
+
+	for i := range arr {
+		counterslice[arr[i]]++
+	}
+
+	resultslice := make([]int, 0, len(arr))
+
+	for i := range counterslice {
+		for counterslice[i] > 0 {
+			resultslice = append(resultslice, i)
+			counterslice[i]--
+		}
+	}
+
+	return resultslice
 }
