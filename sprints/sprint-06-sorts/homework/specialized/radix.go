@@ -36,17 +36,53 @@ package problems
 //   - Works only with non-negative integers in basic implementation
 //   - Can be adapted to work with negative numbers
 func RadixSort(arr []int) []int {
-	panic("implement me")
+	if len(arr) <= 1 {
+		return arr
+	}
+
+	maxInt := getMax(arr)
+
+	razryad := 1
+
+	for maxInt/razryad > 0 {
+		arr = countingSortByDigit(arr, razryad)
+		razryad = razryad * 10
+	}
+
+	return arr
 }
 
 // getMax возвращает максимальное значение в слайсе
 func getMax(arr []int) int {
-	panic("implement me")
+	maxInt := arr[0]
+	for i := 1; i < len(arr); i++ {
+		if arr[i] > maxInt {
+			maxInt = arr[i]
+		}
+	}
+	return maxInt
 }
 
 // countingSortByDigit сортирует слайс по определенному разряду с использованием сортировки подсчетом
 func countingSortByDigit(arr []int, exp int) []int {
-	panic("implement me")
+	counterslice := make([][]int, 10, 10)
+
+	for i := range arr {
+		expdigit := (arr[i] / exp) % 10
+		if expdigit < 0 {
+			return arr
+		}
+		counterslice[expdigit] = append(counterslice[expdigit], arr[i])
+	}
+
+	resSLise := make([]int, 0, len(arr))
+
+	for _, val := range counterslice {
+		for _, everydigit := range val {
+			resSLise = append(resSLise, everydigit)
+		}
+	}
+	return resSLise
 }
 
 // RadixSortExtended версия поразрядной сортировки, которая работает с отрицательными числами
