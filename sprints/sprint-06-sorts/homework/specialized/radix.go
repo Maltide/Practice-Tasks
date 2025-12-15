@@ -54,7 +54,16 @@ func RadixSort(arr []int) []int {
 
 // getMax возвращает максимальное значение в слайсе
 func getMax(arr []int) int {
+	if len(arr) == 0 {
+		return 0
+	}
+
+	if len(arr) == 1 {
+		return arr[0]
+	}
+
 	maxInt := arr[0]
+
 	for i := 1; i < len(arr); i++ {
 		if arr[i] > maxInt {
 			maxInt = arr[i]
@@ -87,5 +96,64 @@ func countingSortByDigit(arr []int, exp int) []int {
 
 // RadixSortExtended версия поразрядной сортировки, которая работает с отрицательными числами
 func RadixSortExtended(arr []int) []int {
-	panic("implement me")
+	if len(arr) <= 1 {
+		return arr
+	}
+
+	pSLice := []int{}
+
+	nSlice := []int{}
+
+	for i := range arr {
+		if arr[i] < 0 {
+			nSlice = append(nSlice, arr[i])
+		} else {
+			pSLice = append(pSLice, arr[i])
+		}
+	}
+
+	for i := range nSlice {
+		nSlice[i] = nSlice[i] * -1
+	}
+
+	maxInt := getMax(arr)
+
+	maxIntForNeg := getMax(nSlice)
+
+	if maxInt < maxIntForNeg {
+		maxInt = maxIntForNeg
+	}
+
+	razryad := 1
+
+	for maxInt/razryad > 0 {
+		pSLice = countingSortByDigit(pSLice, razryad)
+
+		nSlice = countingSortByDigit(nSlice, razryad)
+
+		razryad = razryad * 10
+	}
+
+	for i := 0; i < len(nSlice)/2; i++ {
+
+		nSlice[i] = nSlice[i] * -1
+
+		nSlice[len(nSlice)-i-1] = nSlice[len(nSlice)-i-1] * -1
+
+		nSlice[i], nSlice[len(nSlice)-i-1] = nSlice[len(nSlice)-i-1], nSlice[i]
+	}
+
+	if len(nSlice) > 0 {
+		if nSlice[len(nSlice)/2] > 0 {
+			nSlice[len(nSlice)/2] = nSlice[len(nSlice)/2] * -1
+		}
+	}
+
+	result := make([]int, 0, len(arr))
+
+	result = append(result, nSlice...)
+
+	result = append(result, pSLice...)
+
+	return result
 }
